@@ -9,10 +9,10 @@ export const ProtectedRoute = ({ children }) => {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-slate-900 flex items-center justify-center text-white">
+      <div className="min-h-screen bg-charcoal-900 flex items-center justify-center text-white">
         <div className="flex flex-col items-center gap-3">
-          <Loader2 className="w-8 h-8 animate-spin text-gold-400" />
-          <p className="text-xs text-slate-400 font-medium tracking-wide">
+          <Loader2 className="w-8 h-8 animate-spin text-primary-400" />
+          <p className="text-xs text-slate-300 font-medium tracking-wide">
             Authenticating Admin Portal...
           </p>
         </div>

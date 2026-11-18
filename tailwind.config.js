@@ -7,30 +7,53 @@ export default {
   theme: {
     extend: {
       colors: {
-        brand: {
-          50: '#f0f5fa',
-          100: '#e1ecf6',
-          200: '#c5daf0',
-          300: '#9ec1e5',
-          400: '#6ea0d5',
-          500: '#4882c5',
-          600: '#3467ab',
-          700: '#2a528c',
-          800: '#1b365d', // Primary Navy
-          900: '#0f223d', // Deep Navy
-          950: '#091526',
+        // Primary: Deep Teal (#087F8C)
+        primary: {
+          50: '#F0F9FA',
+          100: '#D8F1F3',
+          200: '#B2E3E8',
+          300: '#7BCFDA',
+          400: '#3FB5C5',
+          500: '#087F8C', // Main Deep Teal
+          600: '#076F7B',
+          700: '#065A64',
+          800: '#054850',
+          900: '#04363C',
+          950: '#021F23',
         },
-        gold: {
-          50: '#fffbeb',
-          100: '#fef3c7',
-          200: '#fde68a',
-          300: '#fcd34d',
-          400: '#fbbf24',
-          500: '#f59e0b',
-          600: '#d97706',
-          700: '#b45309',
-          800: '#92400e',
-          900: '#78350f',
+        // Secondary: Fresh Green (#20A66A)
+        secondary: {
+          50: '#F0FBF5',
+          100: '#DBF5E7',
+          200: '#B7ECCF',
+          300: '#83DEB0',
+          400: '#4DC98D',
+          500: '#20A66A', // Main Fresh Green
+          600: '#188E59',
+          700: '#147248',
+          800: '#115B3A',
+          900: '#0E4A30',
+          950: '#072B1B',
+        },
+        // Headings: Dark Charcoal (#202B33)
+        charcoal: {
+          50: '#F6F8F9',
+          100: '#EDF1F3',
+          200: '#DBE2E6',
+          300: '#C1CCD3',
+          400: '#8B9DAA',
+          500: '#5C7080',
+          600: '#394B59',
+          700: '#2B3842',
+          800: '#202B33', // Main Dark Charcoal
+          900: '#182026',
+          950: '#0F1418',
+        },
+        // Body Text: Slate Grey (#64748B) & Surface colors
+        surface: {
+          DEFAULT: '#FFFFFF',
+          section: '#F5F8F9', // Light Grey Section Background
+          border: '#E5E7EB',  // Light Grey Borders
         }
       },
       fontFamily: {

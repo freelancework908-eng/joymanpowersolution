@@ -3,6 +3,7 @@ import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import { AuthProvider } from './context/AuthContext'
 import { Navbar } from './components/common/Navbar'
 import { Footer } from './components/common/Footer'
+import { FloatingSocialLinks } from './components/common/FloatingSocialLinks'
 import { Home } from './pages/Home'
 import { About } from './pages/About'
 import { Jobs } from './pages/Jobs'
@@ -18,10 +19,12 @@ import { AdminApplications } from './pages/admin/AdminApplications'
 import { ProtectedRoute } from './components/admin/ProtectedRoute'
 
 const PublicLayout = ({ children }) => (
-  <div className="min-h-screen flex flex-col justify-between bg-slate-50">
+  <div className="min-h-screen flex flex-col justify-between bg-white text-slate-600 antialiased overflow-x-hidden">
     <Navbar />
-    <main className="flex-1">{children}</main>
+    <main className="flex-1 w-full">{children}</main>
     <Footer />
+    {/* Floating Social Media Buttons (only on public portal) */}
+    <FloatingSocialLinks />
   </div>
 )
 

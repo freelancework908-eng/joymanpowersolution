@@ -6,12 +6,11 @@ import {
   CheckCircle2, 
   AlertCircle, 
   Loader2, 
-  ShieldCheck,
-  Building,
   MapPin,
   ExternalLink
 } from 'lucide-react'
 import { applicationService } from '../../services/applicationService'
+import { socialConfig } from '../../config/socialLinks'
 
 export const ApplyModal = ({ job, isOpen, onClose, onSuccess }) => {
   const [formData, setFormData] = useState({
@@ -136,100 +135,103 @@ export const ApplyModal = ({ job, isOpen, onClose, onSuccess }) => {
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-xs overflow-y-auto animate-fadeIn">
-      <div className="bg-white rounded-2xl max-w-xl w-full shadow-2xl border border-slate-200 overflow-hidden my-8">
-        {/* Header */}
-        <div className="bg-brand-900 text-white p-5 sm:p-6 flex items-start justify-between">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-charcoal-900/60 backdrop-blur-xs overflow-y-auto animate-fadeIn">
+      <div className="bg-white rounded-2xl max-w-xl w-full shadow-2xl border border-surface-border overflow-hidden my-4 sm:my-8">
+        {/* Header with Deep Teal */}
+        <div className="bg-primary-500 text-white p-5 sm:p-6 flex items-start justify-between">
           <div>
             <div className="flex items-center gap-2 mb-1">
-              <span className="text-xs uppercase tracking-wider font-semibold text-gold-400">
+              <span className="text-[11px] uppercase tracking-wider font-bold text-secondary-200">
                 Application Form
               </span>
-              <span className="text-slate-400">•</span>
-              <span className="text-xs bg-brand-800 px-2 py-0.5 rounded text-slate-200 font-medium">
+              <span className="text-primary-200">•</span>
+              <span className="text-xs bg-primary-600 px-2 py-0.5 rounded text-white font-medium">
                 {job?.country}
               </span>
             </div>
             <h2 className="text-lg sm:text-xl font-bold leading-snug">
               {job?.title || 'Apply for Overseas Vacancy'}
             </h2>
-            <p className="text-xs text-slate-300 mt-1 flex items-center gap-1.5">
-              <MapPin className="w-3.5 h-3.5 text-brand-300" />
+            <p className="text-xs text-primary-100 mt-1 flex items-center gap-1.5">
+              <MapPin className="w-3.5 h-3.5 text-secondary-300" />
               <span>{job?.location}</span>
             </p>
           </div>
           <button
             onClick={resetForm}
-            className="text-slate-300 hover:text-white p-1 rounded-lg hover:bg-brand-800/80 transition-colors"
+            className="text-white/80 hover:text-white p-1 rounded-lg hover:bg-white/10 transition-colors"
+            aria-label="Close modal"
           >
             <X className="w-5 h-5" />
           </button>
         </div>
 
-        {/* Content */}
-        <div className="p-6">
+        {/* Modal Body */}
+        <div className="p-5 sm:p-6 max-h-[75vh] overflow-y-auto">
           {submittedData ? (
             /* Success State */
             <div className="text-center py-6 space-y-4">
-              <div className="w-16 h-16 bg-emerald-100 rounded-full flex items-center justify-center mx-auto text-emerald-600">
+              <div className="w-16 h-16 bg-secondary-50 text-secondary-600 rounded-full flex items-center justify-center mx-auto">
                 <CheckCircle2 className="w-10 h-10" />
               </div>
-              <h3 className="text-2xl font-bold text-slate-900">Application Submitted!</h3>
-              <p className="text-sm text-slate-600 max-w-md mx-auto leading-relaxed">
+              <h3 className="text-xl sm:text-2xl font-bold text-charcoal-800">
+                Application Submitted!
+              </h3>
+              <p className="text-xs sm:text-sm text-slate-600 max-w-md mx-auto leading-relaxed">
                 Thank you, <strong>{formData.candidate_name}</strong>. Your resume for the position of{' '}
-                <strong>{job?.title}</strong> in <strong>{job?.country}</strong> has been received by our recruitment team.
+                <strong>{job?.title}</strong> ({job?.country}) has been received by our overseas recruitment team.
               </p>
 
-              <div className="bg-slate-50 border border-slate-200 rounded-xl p-4 text-left max-w-md mx-auto space-y-2 text-xs text-slate-700">
+              <div className="bg-surface-section border border-surface-border rounded-xl p-4 text-left max-w-md mx-auto space-y-2 text-xs text-slate-700">
                 <div className="flex justify-between">
                   <span className="text-slate-500">Candidate Name:</span>
-                  <span className="font-semibold">{formData.candidate_name}</span>
+                  <span className="font-semibold text-charcoal-800">{formData.candidate_name}</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-slate-500">Contact Number:</span>
-                  <span className="font-semibold">{formData.mobile}</span>
+                  <span className="font-semibold text-charcoal-800">{formData.mobile}</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-slate-500">Target Country:</span>
-                  <span className="font-semibold">{job?.country}</span>
+                  <span className="font-semibold text-primary-700">{job?.country}</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-slate-500">Status:</span>
-                  <span className="text-amber-700 font-semibold bg-amber-50 px-2 py-0.5 rounded">
+                  <span className="text-secondary-700 font-bold bg-secondary-50 px-2 py-0.5 rounded">
                     Under Review
                   </span>
                 </div>
               </div>
 
               <p className="text-xs text-slate-500">
-                Our recruitment coordinator will review your profile and contact you if shortlisted for employer interview.
+                Our recruitment coordinator will review your trade profile and contact you for client interview scheduling.
               </p>
 
               <div className="pt-3 flex flex-col sm:flex-row items-center justify-center gap-3">
                 <a
-                  href={`https://wa.me/919876543210?text=Hello%20Joy%20Manpower%20Solution,%20I%20just%20applied%20for%20${encodeURIComponent(
+                  href={`https://wa.me/919876543210?text=Hello%20Joy%20Manpower%20Solution,%20I%20just%20submitted%20my%20resume%20for%20${encodeURIComponent(
                     job?.title || 'the job'
-                  )}%20in%20${encodeURIComponent(job?.country || '')}.`}
+                  )}%20(${encodeURIComponent(job?.country || '')}).`}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="w-full sm:w-auto inline-flex items-center justify-center gap-1.5 bg-emerald-600 hover:bg-emerald-500 text-white font-semibold text-xs px-5 py-2.5 rounded-lg transition-colors"
+                  className="w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-[#25D366] hover:bg-[#20bd5a] text-white font-bold text-xs px-5 py-3 rounded-xl transition-colors shadow-sm"
                 >
                   <span>WhatsApp Recruitment Team</span>
                   <ExternalLink className="w-3.5 h-3.5" />
                 </a>
                 <button
                   onClick={resetForm}
-                  className="w-full sm:w-auto bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold px-5 py-2.5 rounded-lg transition-colors"
+                  className="w-full sm:w-auto bg-surface-section hover:bg-slate-200 text-slate-700 text-xs font-semibold px-5 py-3 rounded-xl transition-colors"
                 >
                   Close
                 </button>
               </div>
             </div>
           ) : (
-            /* Form */
+            /* Application Form */
             <form onSubmit={handleSubmit} className="space-y-4">
               {errorMessage && (
-                <div className="p-3 bg-red-50 border border-red-200 rounded-lg flex items-start gap-2.5 text-xs text-red-700">
+                <div className="p-3 bg-red-50 border border-red-200 rounded-xl flex items-start gap-2.5 text-xs text-red-700">
                   <AlertCircle className="w-4 h-4 shrink-0 mt-0.5" />
                   <span>{errorMessage}</span>
                 </div>
@@ -237,21 +239,21 @@ export const ApplyModal = ({ job, isOpen, onClose, onSuccess }) => {
 
               {/* Job Auto Populated Field */}
               <div>
-                <label className="block text-xs font-semibold text-slate-700 mb-1">
-                  Applying for Job Vacancy
+                <label className="block text-xs font-semibold text-charcoal-800 mb-1">
+                  Applying for Vacancy
                 </label>
                 <input
                   type="text"
                   value={`${job?.title} (${job?.country})`}
                   disabled
-                  className="w-full px-3.5 py-2 bg-slate-100 border border-slate-200 rounded-lg text-xs font-medium text-slate-600 cursor-not-allowed"
+                  className="w-full px-3.5 py-2.5 bg-surface-section border border-surface-border rounded-xl text-xs font-medium text-slate-600 cursor-not-allowed"
                 />
               </div>
 
               {/* Full Name & Mobile */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
                 <div>
-                  <label className="block text-xs font-semibold text-slate-700 mb-1">
+                  <label className="block text-xs font-semibold text-charcoal-800 mb-1">
                     Full Name <span className="text-red-500">*</span>
                   </label>
                   <input
@@ -261,12 +263,12 @@ export const ApplyModal = ({ job, isOpen, onClose, onSuccess }) => {
                     placeholder="e.g. Rahul Sharma"
                     value={formData.candidate_name}
                     onChange={handleInputChange}
-                    className="w-full px-3.5 py-2 bg-white border border-slate-300 rounded-lg text-sm text-slate-900 focus:outline-none focus:border-brand-700 focus:ring-1 focus:ring-brand-700"
+                    className="w-full px-3.5 py-2.5 bg-white border border-surface-border rounded-xl text-sm text-charcoal-800 focus:outline-none focus:border-primary-500 focus:ring-1 focus:ring-primary-500"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-xs font-semibold text-slate-700 mb-1">
+                  <label className="block text-xs font-semibold text-charcoal-800 mb-1">
                     Mobile Number <span className="text-red-500">*</span>
                   </label>
                   <input
@@ -276,15 +278,15 @@ export const ApplyModal = ({ job, isOpen, onClose, onSuccess }) => {
                     placeholder="+91 98765 43210"
                     value={formData.mobile}
                     onChange={handleInputChange}
-                    className="w-full px-3.5 py-2 bg-white border border-slate-300 rounded-lg text-sm text-slate-900 focus:outline-none focus:border-brand-700 focus:ring-1 focus:ring-brand-700"
+                    className="w-full px-3.5 py-2.5 bg-white border border-surface-border rounded-xl text-sm text-charcoal-800 focus:outline-none focus:border-primary-500 focus:ring-1 focus:ring-primary-500"
                   />
                 </div>
               </div>
 
               {/* Email & Total Experience */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
                 <div>
-                  <label className="block text-xs font-semibold text-slate-700 mb-1">
+                  <label className="block text-xs font-semibold text-charcoal-800 mb-1">
                     Email Address <span className="text-red-500">*</span>
                   </label>
                   <input
@@ -294,29 +296,29 @@ export const ApplyModal = ({ job, isOpen, onClose, onSuccess }) => {
                     placeholder="name@example.com"
                     value={formData.email}
                     onChange={handleInputChange}
-                    className="w-full px-3.5 py-2 bg-white border border-slate-300 rounded-lg text-sm text-slate-900 focus:outline-none focus:border-brand-700 focus:ring-1 focus:ring-brand-700"
+                    className="w-full px-3.5 py-2.5 bg-white border border-surface-border rounded-xl text-sm text-charcoal-800 focus:outline-none focus:border-primary-500 focus:ring-1 focus:ring-primary-500"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-xs font-semibold text-slate-700 mb-1">
+                  <label className="block text-xs font-semibold text-charcoal-800 mb-1">
                     Total Experience <span className="text-red-500">*</span>
                   </label>
                   <input
                     type="text"
                     name="experience"
                     required
-                    placeholder="e.g. 4 Years (Gulf / India)"
+                    placeholder="e.g. 4 Years"
                     value={formData.experience}
                     onChange={handleInputChange}
-                    className="w-full px-3.5 py-2 bg-white border border-slate-300 rounded-lg text-sm text-slate-900 focus:outline-none focus:border-brand-700 focus:ring-1 focus:ring-brand-700"
+                    className="w-full px-3.5 py-2.5 bg-white border border-surface-border rounded-xl text-sm text-charcoal-800 focus:outline-none focus:border-primary-500 focus:ring-1 focus:ring-primary-500"
                   />
                 </div>
               </div>
 
               {/* Current Location */}
               <div>
-                <label className="block text-xs font-semibold text-slate-700 mb-1">
+                <label className="block text-xs font-semibold text-charcoal-800 mb-1">
                   Current Location (City / State) <span className="text-red-500">*</span>
                 </label>
                 <input
@@ -326,16 +328,16 @@ export const ApplyModal = ({ job, isOpen, onClose, onSuccess }) => {
                   placeholder="e.g. Mumbai, Maharashtra"
                   value={formData.current_location}
                   onChange={handleInputChange}
-                  className="w-full px-3.5 py-2 bg-white border border-slate-300 rounded-lg text-sm text-slate-900 focus:outline-none focus:border-brand-700 focus:ring-1 focus:ring-brand-700"
+                  className="w-full px-3.5 py-2.5 bg-white border border-surface-border rounded-xl text-sm text-charcoal-800 focus:outline-none focus:border-primary-500 focus:ring-1 focus:ring-primary-500"
                 />
               </div>
 
-              {/* Resume Upload */}
+              {/* Resume Upload Box */}
               <div>
-                <label className="block text-xs font-semibold text-slate-700 mb-1">
+                <label className="block text-xs font-semibold text-charcoal-800 mb-1">
                   Resume Upload (PDF, DOC, DOCX up to 5MB) <span className="text-red-500">*</span>
                 </label>
-                <div className="border-2 border-dashed border-slate-300 rounded-xl p-4 text-center hover:border-brand-600 transition-colors bg-slate-50/50">
+                <div className="border-2 border-dashed border-surface-border rounded-xl p-4 text-center hover:border-primary-500 transition-colors bg-surface-section">
                   <input
                     type="file"
                     id="resume-upload"
@@ -348,21 +350,21 @@ export const ApplyModal = ({ job, isOpen, onClose, onSuccess }) => {
                     className="cursor-pointer flex flex-col items-center justify-center"
                   >
                     {resumeFile ? (
-                      <div className="flex items-center gap-2 text-brand-900 font-semibold text-sm">
-                        <FileText className="w-5 h-5 text-brand-700" />
-                        <span>{resumeFile.name}</span>
+                      <div className="flex items-center gap-2 text-primary-700 font-semibold text-xs sm:text-sm">
+                        <FileText className="w-5 h-5 text-primary-600 shrink-0" />
+                        <span className="truncate max-w-[200px] sm:max-w-xs">{resumeFile.name}</span>
                         <span className="text-xs text-slate-400">
                           ({(resumeFile.size / 1024).toFixed(1)} KB)
                         </span>
                       </div>
                     ) : (
                       <>
-                        <Upload className="w-7 h-7 text-slate-400 mb-2" />
-                        <span className="text-xs sm:text-sm font-semibold text-brand-800">
+                        <Upload className="w-7 h-7 text-primary-500 mb-2" />
+                        <span className="text-xs sm:text-sm font-bold text-primary-600">
                           Click to select your resume
                         </span>
                         <span className="text-[11px] text-slate-400 mt-0.5">
-                          Supported: PDF, DOC, DOCX (Max size 5MB)
+                          PDF, DOC, DOCX (Max size 5MB)
                         </span>
                       </>
                     )}
@@ -378,32 +380,32 @@ export const ApplyModal = ({ job, isOpen, onClose, onSuccess }) => {
                     name="consent"
                     checked={formData.consent}
                     onChange={handleInputChange}
-                    className="mt-0.5 rounded border-slate-300 text-brand-800 focus:ring-brand-700"
+                    className="mt-0.5 rounded border-slate-300 text-primary-500 focus:ring-primary-500"
                   />
                   <span>
-                    I confirm that the details provided are true and I consent to Joy Manpower Solution storing and reviewing my resume for overseas employment in UAE and Saudi Arabia.
+                    I confirm that the details provided are accurate and consent to Joy Manpower Solution reviewing my resume for overseas recruitment in UAE and Saudi Arabia.
                   </span>
                 </label>
               </div>
 
               {/* Actions */}
-              <div className="pt-3 flex items-center justify-end gap-3 border-t border-slate-100">
+              <div className="pt-3 flex items-center justify-end gap-3 border-t border-surface-border">
                 <button
                   type="button"
                   onClick={resetForm}
-                  className="px-4 py-2 text-xs font-semibold text-slate-600 hover:text-slate-800 bg-slate-100 hover:bg-slate-200 rounded-lg transition-colors"
+                  className="px-4 py-2.5 text-xs font-semibold text-slate-600 hover:text-charcoal-800 bg-surface-section hover:bg-slate-200 rounded-xl transition-colors"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
                   disabled={isSubmitting}
-                  className="px-6 py-2.5 text-xs sm:text-sm font-semibold text-white bg-brand-800 hover:bg-brand-900 rounded-lg shadow-sm hover:shadow transition-all inline-flex items-center gap-2 disabled:opacity-70 disabled:cursor-not-allowed"
+                  className="px-6 py-2.5 text-xs sm:text-sm font-bold text-white bg-primary-500 hover:bg-primary-600 rounded-xl shadow-xs hover:shadow transition-all inline-flex items-center gap-2 disabled:opacity-70 disabled:cursor-not-allowed active:scale-95"
                 >
                   {isSubmitting ? (
                     <>
                       <Loader2 className="w-4 h-4 animate-spin text-white" />
-                      <span>Submitting Application...</span>
+                      <span>Submitting...</span>
                     </>
                   ) : (
                     <span>Submit Application</span>

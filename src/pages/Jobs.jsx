@@ -4,10 +4,9 @@ import {
   Briefcase, 
   Search, 
   Filter, 
-  MapPin, 
   RotateCcw,
   Sparkles,
-  Users
+  MapPin
 } from 'lucide-react'
 import { jobService } from '../services/jobService'
 import { JobCard } from '../components/common/JobCard'
@@ -37,7 +36,6 @@ export const Jobs = () => {
   const [activeJobForModal, setActiveJobForModal] = useState(null)
 
   useEffect(() => {
-    // If URL has query param for country, update filter
     const cParam = searchParams.get('country')
     if (cParam && ['UAE', 'Saudi Arabia'].includes(cParam)) {
       setCountryFilter(cParam)
@@ -84,20 +82,20 @@ export const Jobs = () => {
   }
 
   return (
-    <div className="py-10 space-y-8">
-      {/* Page Header */}
+    <div className="py-8 sm:py-12 space-y-6 sm:space-y-8 w-full">
+      {/* Header Banner */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="bg-brand-900 text-white rounded-2xl p-8 sm:p-12 relative overflow-hidden">
-          <div className="max-w-3xl space-y-3 relative z-10">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-brand-800 text-xs font-semibold text-gold-400 border border-brand-700">
+        <div className="bg-primary-500 text-white rounded-2xl p-6 sm:p-10 relative overflow-hidden">
+          <div className="max-w-3xl space-y-2.5 relative z-10">
+            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-primary-600/70 border border-primary-400 text-xs font-semibold text-secondary-200">
               <Sparkles className="w-3.5 h-3.5" />
-              <span>Verified Gulf Openings Only</span>
+              <span>Verified Gulf Vacancies</span>
             </div>
-            <h1 className="text-2xl sm:text-4xl font-extrabold tracking-tight">
-              Overseas Job Vacancies
+            <h1 className="text-2xl sm:text-3xl md:text-4xl font-extrabold tracking-tight">
+              Overseas Job Opportunities
             </h1>
-            <p className="text-xs sm:text-sm text-slate-300 leading-relaxed max-w-2xl">
-              Browse current verified openings in <strong>Dubai (UAE)</strong> and <strong>Saudi Arabia</strong>. All vacancies offer direct employer visas, competitive monthly remuneration, and standard Gulf benefits.
+            <p className="text-xs sm:text-sm text-primary-100 leading-relaxed max-w-2xl">
+              Explore open positions across <strong>Dubai (UAE)</strong> and <strong>Saudi Arabia</strong>. All vacancies are sponsored directly by verified employers with official visa processing.
             </p>
           </div>
         </div>
@@ -105,30 +103,30 @@ export const Jobs = () => {
 
       {/* Filter and Search Bar */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="bg-white rounded-2xl border border-slate-200 p-5 sm:p-6 shadow-xs space-y-5">
-          {/* Top Row: Country Filter Pills */}
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-slate-100">
-            <div className="flex items-center gap-2">
-              <span className="text-xs font-bold text-slate-700 uppercase tracking-wide">
+        <div className="bg-white rounded-2xl border border-surface-border p-4 sm:p-6 shadow-xs space-y-4 sm:space-y-5">
+          {/* Top Row: Country Filter Pills & Count */}
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 sm:pb-4 border-b border-surface-border">
+            <div className="flex flex-wrap items-center gap-2">
+              <span className="text-xs font-bold text-charcoal-800 uppercase tracking-wide">
                 Destination:
               </span>
-              <div className="inline-flex p-1 bg-slate-100 rounded-xl border border-slate-200">
+              <div className="inline-flex p-1 bg-surface-section rounded-xl border border-surface-border">
                 <button
                   onClick={() => handleCountryChange('All')}
-                  className={`px-3.5 py-1.5 rounded-lg text-xs font-semibold transition-all ${
+                  className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all ${
                     countryFilter === 'All'
-                      ? 'bg-brand-800 text-white shadow-xs'
-                      : 'text-slate-600 hover:text-slate-900'
+                      ? 'bg-primary-500 text-white shadow-xs'
+                      : 'text-slate-600 hover:text-charcoal-800'
                   }`}
                 >
                   All Countries
                 </button>
                 <button
                   onClick={() => handleCountryChange('UAE')}
-                  className={`px-3.5 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition-all ${
+                  className={`px-3 py-1.5 rounded-lg text-xs font-bold flex items-center gap-1.5 transition-all ${
                     countryFilter === 'UAE'
-                      ? 'bg-brand-800 text-white shadow-xs'
-                      : 'text-slate-600 hover:text-slate-900'
+                      ? 'bg-primary-500 text-white shadow-xs'
+                      : 'text-slate-600 hover:text-charcoal-800'
                   }`}
                 >
                   <span>🇦🇪</span>
@@ -136,10 +134,10 @@ export const Jobs = () => {
                 </button>
                 <button
                   onClick={() => handleCountryChange('Saudi Arabia')}
-                  className={`px-3.5 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition-all ${
+                  className={`px-3 py-1.5 rounded-lg text-xs font-bold flex items-center gap-1.5 transition-all ${
                     countryFilter === 'Saudi Arabia'
-                      ? 'bg-brand-800 text-white shadow-xs'
-                      : 'text-slate-600 hover:text-slate-900'
+                      ? 'bg-primary-500 text-white shadow-xs'
+                      : 'text-slate-600 hover:text-charcoal-800'
                   }`}
                 >
                   <span>🇸🇦</span>
@@ -149,7 +147,7 @@ export const Jobs = () => {
             </div>
 
             <div className="text-xs text-slate-500 font-medium">
-              Showing <strong className="text-slate-800">{jobs.length}</strong> active published {jobs.length === 1 ? 'vacancy' : 'vacancies'}
+              Showing <strong className="text-charcoal-800 font-bold">{jobs.length}</strong> active published {jobs.length === 1 ? 'vacancy' : 'vacancies'}
             </div>
           </div>
 
@@ -163,7 +161,7 @@ export const Jobs = () => {
                 placeholder="Search job title, skills, or city..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-xs sm:text-sm text-slate-900 focus:outline-none focus:border-brand-700 focus:bg-white"
+                className="w-full pl-10 pr-4 py-2.5 bg-surface-section border border-surface-border rounded-xl text-xs sm:text-sm text-charcoal-800 focus:outline-none focus:border-primary-500 focus:bg-white"
               />
             </div>
 
@@ -172,7 +170,7 @@ export const Jobs = () => {
               <select
                 value={categoryFilter}
                 onChange={(e) => setCategoryFilter(e.target.value)}
-                className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-xs sm:text-sm text-slate-800 focus:outline-none focus:border-brand-700 focus:bg-white"
+                className="w-full px-3.5 py-2.5 bg-surface-section border border-surface-border rounded-xl text-xs sm:text-sm text-charcoal-800 focus:outline-none focus:border-primary-500 focus:bg-white"
               >
                 {CATEGORIES.map((cat) => (
                   <option key={cat} value={cat}>
@@ -182,11 +180,11 @@ export const Jobs = () => {
               </select>
             </div>
 
-            {/* Submit / Search Button */}
+            {/* Filter Buttons */}
             <div className="sm:col-span-2 flex items-center gap-2">
               <button
                 type="submit"
-                className="w-full py-2.5 px-4 bg-brand-800 hover:bg-brand-900 text-white font-semibold text-xs rounded-xl shadow-xs transition-colors"
+                className="w-full py-2.5 px-4 bg-primary-500 hover:bg-primary-600 text-white font-bold text-xs rounded-xl shadow-xs transition-colors active:scale-95"
               >
                 Filter
               </button>
@@ -195,7 +193,7 @@ export const Jobs = () => {
                   type="button"
                   onClick={handleResetFilters}
                   title="Reset filters"
-                  className="p-2.5 bg-slate-100 hover:bg-slate-200 text-slate-600 rounded-xl transition-colors shrink-0"
+                  className="p-2.5 bg-surface-section hover:bg-slate-200 text-slate-600 rounded-xl transition-colors shrink-0"
                 >
                   <RotateCcw className="w-4 h-4" />
                 </button>
@@ -205,12 +203,12 @@ export const Jobs = () => {
         </div>
       </div>
 
-      {/* Jobs Listing Grid */}
+      {/* Jobs Listing Grid (3 cols on large desktop, 2 on tablet, 1 on mobile) */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {loading ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {[1, 2, 3, 4, 5, 6].map((i) => (
-              <div key={i} className="bg-white rounded-xl border border-slate-200 p-6 space-y-4 animate-pulse">
+              <div key={i} className="bg-white rounded-2xl border border-surface-border p-6 space-y-4 animate-pulse">
                 <div className="h-4 bg-slate-200 rounded w-1/4"></div>
                 <div className="h-6 bg-slate-200 rounded w-3/4"></div>
                 <div className="h-4 bg-slate-200 rounded w-1/2"></div>
@@ -229,18 +227,18 @@ export const Jobs = () => {
             ))}
           </div>
         ) : (
-          <div className="bg-white rounded-2xl border border-slate-200 p-12 text-center max-w-xl mx-auto space-y-4 shadow-xs">
-            <div className="w-16 h-16 bg-brand-50 rounded-full flex items-center justify-center mx-auto text-brand-800">
-              <Briefcase className="w-8 h-8" />
+          <div className="bg-white rounded-2xl border border-surface-border p-10 sm:p-12 text-center max-w-lg mx-auto space-y-3 shadow-xs">
+            <div className="w-14 h-14 bg-primary-50 rounded-full flex items-center justify-center mx-auto text-primary-500">
+              <Briefcase className="w-7 h-7" />
             </div>
-            <h3 className="text-lg font-bold text-slate-900">No matching vacancies found</h3>
-            <p className="text-xs sm:text-sm text-slate-500 leading-relaxed">
+            <h3 className="text-base font-bold text-charcoal-800">No matching vacancies found</h3>
+            <p className="text-xs text-slate-500 leading-relaxed">
               We couldn't find any published job vacancies matching your current filters. Try selecting a different category or country, or reset the filters.
             </p>
             <div className="pt-2">
               <button
                 onClick={handleResetFilters}
-                className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold text-xs transition-colors"
+                className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-surface-section hover:bg-slate-200 text-slate-700 font-semibold text-xs transition-colors"
               >
                 <RotateCcw className="w-3.5 h-3.5" />
                 <span>Reset Filters</span>

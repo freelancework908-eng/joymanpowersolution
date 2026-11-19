@@ -1,151 +1,98 @@
-import React, { createContext, useContext, useState, useEffect } from 'react'
-import { supabase, isSupabaseConfigured } from '../lib/supabase'
+import React, { createContext, useContext, useState, useEffect } from 'react';
+import { apiRequest, setAuthToken, getAuthToken } from '../services/apiClient';
 
-const AuthContext = createContext(null)
-
-const DEMO_ADMIN_KEY = 'jms_admin_session'
+const AuthContext = createContext(null);
 
 export const AuthProvider = ({ children }) => {
-  const [user, setUser] = useState(null)
-  const [loading, setLoading] = useState(true)
+  const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    let mounted = true
+    let mounted = true;
 
-    const initAuth = async () => {
-      if (isSupabaseConfigured) {
-        try {
-          const { data } = await supabase.auth.getSession()
-          if (mounted && data?.session?.user) {
-            setUser({
-              id: data.session.user.id,
-              email: data.session.user.email,
-              role: 'admin',
-              provider: 'supabase'
-            })
-          }
-        } catch (e) {
-          console.warn('Supabase auth session check failed:', e)
-        }
-      } else {
-        // Local preview session
-        const stored = localStorage.getItem(DEMO_ADMIN_KEY)
-        if (stored && mounted) {
-          try {
-            setUser(JSON.parse(stored))
-          } catch {
-            localStorage.removeItem(DEMO_ADMIN_KEY)
-          }
-        }
+    const checkSession = async () => {
+      const token = getAuthToken();
+      if (!token) {
+        if (mounted) setLoading(false);
+        return;
       }
 
-      if (mounted) setLoading(false)
-    }
-
-    initAuth()
-
-    let authListener = null
-    if (isSupabaseConfigured) {
-      const { data } = supabase.auth.onAuthStateChange((_event, session) => {
-        if (session?.user) {
-          setUser({
-            id: session.user.id,
-            email: session.user.email,
-            role: 'admin',
-            provider: 'supabase'
-          })
-        } else {
-          setUser(null)
+      try {
+        const { data, error } = await apiRequest('/api/auth/me');
+        if (mounted) {
+          if (!error && data?.admin) {
+            setUser({
+              id: data.admin.id,
+              email: data.admin.email,
+              name: data.admin.name,
+              role: 'admin',
+            });
+          } else {
+            // Token expired or invalid
+            setAuthToken(null);
+            setUser(null);
+          }
         }
-        setLoading(false)
-      })
-      authListener = data.subscription
-    }
+      } catch (err) {
+        if (mounted) {
+          setAuthToken(null);
+          setUser(null);
+        }
+      } finally {
+        if (mounted) setLoading(false);
+      }
+    };
+
+    checkSession();
 
     return () => {
-      mounted = false
-      if (authListener) authListener.unsubscribe()
-    }
-  }, [])
+      mounted = false;
+    };
+  }, []);
 
   const login = async (email, password) => {
-    if (isSupabaseConfigured) {
-      try {
-        const { data, error } = await supabase.auth.signInWithPassword({
-          email,
-          password
-        })
-        if (error) throw error
-        setUser({
-          id: data.user.id,
-          email: data.user.email,
-          role: 'admin',
-          provider: 'supabase'
-        })
-        return { success: true }
-      } catch (err) {
-        return { success: false, error: err.message || 'Invalid credentials' }
+    try {
+      const res = await fetch('/api/auth/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: email.trim(), password }),
+      });
+
+      const data = await res.json();
+      if (!res.ok || !data.success) {
+        return { success: false, error: data.error || 'Invalid credentials' };
       }
-    }
 
-    // Local / Demo Admin Login
-    // Default demo: admin@joymanpowersolution.com / admin123
-    const defaultEmail = 'admin@joymanpowersolution.com'
-    const defaultPass = 'admin123'
-
-    if (
-      (email.trim().toLowerCase() === defaultEmail && password === defaultPass) ||
-      (email.trim().toLowerCase().includes('admin') && password.length >= 6)
-    ) {
-      const adminUser = {
-        id: 'admin-local-' + Date.now(),
-        email: email.trim().toLowerCase(),
+      setAuthToken(data.token);
+      setUser({
+        id: data.admin.id,
+        email: data.admin.email,
+        name: data.admin.name,
         role: 'admin',
-        provider: 'local_demo'
-      }
-      localStorage.setItem(DEMO_ADMIN_KEY, JSON.stringify(adminUser))
-      setUser(adminUser)
-      return { success: true }
-    }
+      });
 
-    return {
-      success: false,
-      error: 'Invalid email or password. Use admin@joymanpowersolution.com / admin123 for demo access.'
+      return { success: true };
+    } catch (err) {
+      return { success: false, error: err.message || 'Login connection failed' };
     }
-  }
+  };
 
-  const logout = async () => {
-    if (isSupabaseConfigured) {
-      try {
-        await supabase.auth.signOut()
-      } catch (e) {
-        console.warn('Sign out warning:', e)
-      }
-    }
-    localStorage.removeItem(DEMO_ADMIN_KEY)
-    setUser(null)
-  }
+  const logout = () => {
+    setAuthToken(null);
+    setUser(null);
+  };
 
   return (
-    <AuthContext.Provider
-      value={{
-        user,
-        isAuthenticated: Boolean(user),
-        loading,
-        login,
-        logout,
-        isSupabaseConfigured
-      }}
-    >
+    <AuthContext.Provider value={{ user, login, logout, loading }}>
       {children}
     </AuthContext.Provider>
-  )
-}
+  );
+};
 
 export const useAuth = () => {
-  const context = useContext(AuthContext)
+  const context = useContext(AuthContext);
   if (!context) {
-    throw new Error('useAuth must be used within an AuthProvider')
+    throw new Error('useAuth must be used within an AuthProvider');
   }
-  return context
-}
+  return context;
+};

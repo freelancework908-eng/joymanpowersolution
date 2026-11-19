@@ -7,7 +7,8 @@ import {
   AlertCircle, 
   Loader2, 
   KeyRound,
-  Database
+  Database,
+  ShieldCheck
 } from 'lucide-react'
 import { useAuth } from '../../context/AuthContext'
 
@@ -45,42 +46,35 @@ export const AdminLogin = () => {
   }
 
   return (
-    <div className="min-h-screen bg-charcoal-950 flex flex-col justify-center items-center p-4 relative overflow-hidden">
-      {/* Subtle Teal Glow */}
-      <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-96 h-96 bg-primary-500/10 rounded-full blur-3xl pointer-events-none"></div>
+    <div className="min-h-screen bg-[#140233] flex flex-col justify-center items-center p-4 relative overflow-hidden">
+      {/* Subtle Purple Glow */}
+      <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-96 h-96 bg-[#5015A8]/20 rounded-full blur-3xl pointer-events-none"></div>
 
       {/* Top back link */}
       <div className="w-full max-w-md mb-6 flex justify-between items-center text-xs">
         <Link
           to="/"
-          className="inline-flex items-center gap-1.5 text-slate-400 hover:text-white transition-colors"
+          className="inline-flex items-center gap-1.5 text-slate-300 hover:text-white transition-colors"
         >
-          <ArrowLeft className="w-3.5 h-3.5" />
+          <ArrowLeft className="w-3.5 h-3.5 text-[#FFC900]" />
           <span>Return to Public Website</span>
         </Link>
 
-        {isSupabaseConfigured ? (
-          <span className="inline-flex items-center gap-1 text-secondary-400 font-medium">
-            <span className="w-2 h-2 rounded-full bg-secondary-400"></span>
-            <span>Supabase Ready</span>
-          </span>
-        ) : (
-          <span className="inline-flex items-center gap-1 text-primary-300 font-medium">
-            <span className="w-2 h-2 rounded-full bg-primary-400"></span>
-            <span>Demo Mode</span>
-          </span>
-        )}
+        <span className="inline-flex items-center gap-1.5 text-emerald-400 font-bold">
+          <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+          <span>TiDB & B2 Cloud Connected</span>
+        </span>
       </div>
 
       {/* Card */}
-      <div className="w-full max-w-md bg-charcoal-900 border border-charcoal-800 rounded-2xl p-6 sm:p-8 shadow-2xl relative z-10 space-y-6">
+      <div className="w-full max-w-md bg-[#26075D] border border-[#3E0F87] rounded-3xl p-6 sm:p-8 shadow-2xl relative z-10 space-y-6 text-white">
         <div className="text-center space-y-2">
-          <div className="w-12 h-12 rounded-xl bg-primary-500 border border-primary-400 text-white flex items-center justify-center mx-auto shadow-sm">
-            <Lock className="w-6 h-6" />
+          <div className="w-14 h-14 rounded-2xl bg-[#FFC900] text-[#26075D] flex items-center justify-center mx-auto shadow-md">
+            <span className="text-xl font-black">JMS</span>
           </div>
           <h1 className="text-xl sm:text-2xl font-black text-white tracking-tight">Admin Portal</h1>
-          <p className="text-xs text-slate-400">
-            Sign in to manage UAE & Saudi Arabian job postings and candidate resumes.
+          <p className="text-xs text-slate-300">
+            Sign in to manage UAE & Saudi Arabian job postings, banner, gallery, and candidate resumes.
           </p>
         </div>
 
@@ -93,35 +87,35 @@ export const AdminLogin = () => {
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label className="block text-xs font-semibold text-slate-300 mb-1.5">
+            <label className="block text-xs font-bold text-slate-300 mb-1.5 uppercase tracking-wider">
               Admin Email Address
             </label>
             <div className="relative">
-              <Mail className="w-4 h-4 text-slate-500 absolute left-3.5 top-3" />
+              <Mail className="w-4 h-4 text-slate-400 absolute left-3.5 top-3" />
               <input
                 type="email"
                 required
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="admin@joymanpowersolution.com"
-                className="w-full pl-10 pr-4 py-2.5 bg-charcoal-950 border border-charcoal-700 rounded-xl text-xs sm:text-sm text-white placeholder:text-slate-600 focus:outline-none focus:border-primary-500"
+                className="w-full pl-10 pr-4 py-2.5 bg-[#140233] border border-[#3E0F87] rounded-xl text-xs sm:text-sm text-white placeholder:text-slate-500 focus:outline-none focus:border-[#FFC900]"
               />
             </div>
           </div>
 
           <div>
-            <label className="block text-xs font-semibold text-slate-300 mb-1.5">
+            <label className="block text-xs font-bold text-slate-300 mb-1.5 uppercase tracking-wider">
               Password
             </label>
             <div className="relative">
-              <KeyRound className="w-4 h-4 text-slate-500 absolute left-3.5 top-3" />
+              <KeyRound className="w-4 h-4 text-slate-400 absolute left-3.5 top-3" />
               <input
                 type="password"
                 required
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="••••••••"
-                className="w-full pl-10 pr-4 py-2.5 bg-charcoal-950 border border-charcoal-700 rounded-xl text-xs sm:text-sm text-white placeholder:text-slate-600 focus:outline-none focus:border-primary-500"
+                className="w-full pl-10 pr-4 py-2.5 bg-[#140233] border border-[#3E0F87] rounded-xl text-xs sm:text-sm text-white placeholder:text-slate-500 focus:outline-none focus:border-[#FFC900]"
               />
             </div>
           </div>
@@ -129,11 +123,11 @@ export const AdminLogin = () => {
           <button
             type="submit"
             disabled={loading}
-            className="w-full py-2.5 px-4 bg-primary-500 hover:bg-primary-600 text-white font-bold text-xs sm:text-sm rounded-xl shadow-md transition-colors flex items-center justify-center gap-2 disabled:opacity-60 active:scale-95"
+            className="w-full py-3 px-4 bg-[#FFC900] hover:bg-[#F5B900] text-[#26075D] font-black text-xs sm:text-sm rounded-xl shadow-md transition-colors flex items-center justify-center gap-2 disabled:opacity-60 active:scale-95 uppercase tracking-wider"
           >
             {loading ? (
               <>
-                <Loader2 className="w-4 h-4 animate-spin text-white" />
+                <Loader2 className="w-4 h-4 animate-spin text-[#26075D]" />
                 <span>Signing in...</span>
               </>
             ) : (
@@ -143,14 +137,14 @@ export const AdminLogin = () => {
         </form>
 
         {/* Demo Fast Login Shortcut */}
-        <div className="pt-2 border-t border-charcoal-800 text-center space-y-2">
+        <div className="pt-2 border-t border-white/10 text-center space-y-2">
           <p className="text-[11px] text-slate-400">
             For testing or evaluation:
           </p>
           <button
             type="button"
             onClick={handleFillDemo}
-            className="w-full py-2 px-3 bg-charcoal-800 hover:bg-charcoal-700 text-slate-300 text-xs font-medium rounded-xl border border-charcoal-700 transition-colors"
+            className="w-full py-2 px-3 bg-white/10 hover:bg-white/15 text-slate-200 text-xs font-bold rounded-xl border border-white/10 transition-colors"
           >
             Fill Demo Credentials (admin@joymanpowersolution.com / admin123)
           </button>

@@ -58,18 +58,36 @@ Centralized configuration in `src/config/socialLinks.js`:
 ## 🚀 Key Modules & Pages
 
 ### 🌐 Public Portal
-1. **Home Page (`/`)**: Hero section, exclusive UAE (Dubai) & Saudi Arabia country selectors, latest dynamic job openings, about summary, services, and recruitment pipeline.
+1. **Home Page (`/`)**: Dynamic Homepage Banner, Hero section, exclusive UAE (Dubai) & Saudi Arabia country selectors, latest dynamic job openings, Candidate Review Shorts / Reels section, about summary, services, and recruitment pipeline.
 2. **About Us (`/about`)**: Company background, mission, vision, and ethical recruitment standards (direct visas only).
 3. **Jobs Listing (`/jobs`)**: Filterable job catalog by country (All / UAE / Saudi Arabia), category, and keyword search.
 4. **Job Details (`/jobs/:id`)**: Comprehensive role overview, responsibilities, candidate requirements, benefits, and instant apply trigger.
 5. **Apply Modal (`ApplyModal`)**: Full name, mobile, email, experience, location, resume file check (up to 5MB), and candidate consent.
-6. **Contact Us (`/contact`)**: Office contact info, WhatsApp chat link, inquiry form, and location map embed.
+6. **Customer Reviews (`/reviews`)**: Dedicated testimonials portal featuring 9:16 vertical video shorts and candidate stories filtered by destination and sector.
+7. **Contact Us (`/contact`)**: Office contact info, WhatsApp chat link, inquiry form, and location map embed.
 
 ### 🔐 Admin Management Panel
 1. **Admin Login (`/admin/login`)**: Protected route with one-click demo credentials (`admin@joymanpowersolution.com` / `admin123`) or Supabase Auth.
-2. **Dashboard (`/admin/dashboard`)**: Metric cards for Total Jobs, Published Jobs, Closed Jobs, and Total Applications.
+2. **Dashboard (`/admin/dashboard`)**: Metric cards for Total Jobs, Applications, Active Banner status, and Review Shorts counts.
 3. **Job Vacancy Management (`/admin/jobs`)**: Add, edit, delete, publish/unpublish, and close job vacancies with immediate synchronization to the public website.
 4. **Candidate Applications (`/admin/applications`)**: View candidate profiles, download resumes, and update application status (`Pending`, `Shortlisted`, `Selected`, `Rejected`).
+5. **Homepage Banner (`/admin/banner`)**: Upload banner images with live preview, update heading, description, CTA button & link, and activate/deactivate banners (strictly one active at a time).
+6. **Manage Reviews (`/admin/reviews`)**: Upload vertical MP4 video testimonials (up to 50 MB), upload or auto-capture thumbnails, edit candidate details, toggle publish/unpublish, preview in-browser, and delete reviews.
+
+---
+
+## 🗄️ Database Tables & Storage Buckets (Supabase)
+
+### Tables
+- `public.jobs`: Job vacancy listings.
+- `public.applications`: Candidate job applications with resume link.
+- `public.homepage_banner`: Homepage banner image, heading, description, CTA text, link, and active status flag.
+- `public.reviews`: Candidate video testimonials (short reels) with 9:16 video URLs, thumbnails, candidate details, country, and status.
+
+### Storage Buckets
+- `resumes`: PDF, DOC, DOCX resume documents.
+- `banners`: Full-width banner images (JPG, PNG, WebP).
+- `reviews`: Candidate video testimonials (`/videos` in MP4 format, max 50 MB) and thumbnail posters (`/thumbnails`).
 
 ---
 

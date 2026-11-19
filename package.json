@@ -6,11 +6,24 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "server": "node server/index.js",
+    "start": "node server/index.js",
+    "audit:test": "node scripts/e2e-audit-test.js"
   },
   "dependencies": {
+    "@aws-sdk/client-s3": "^3.1172.0",
+    "@aws-sdk/s3-request-presigner": "^3.1172.0",
     "@supabase/supabase-js": "^2.48.1",
+    "bcryptjs": "^3.0.3",
+    "cors": "^2.8.6",
+    "dotenv": "^18.0.10",
+    "express": "^5.3.0",
+    "jsonwebtoken": "^9.0.3",
     "lucide-react": "^0.474.0",
+    "mime-types": "^3.0.2",
+    "multer": "^2.5.0",
+    "mysql2": "^3.24.6",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-router-dom": "^6.28.1"

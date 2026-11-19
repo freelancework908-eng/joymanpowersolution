@@ -1,196 +1,292 @@
 import React, { useState } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import { 
-  Briefcase, 
   Phone, 
   Mail, 
+  MapPin, 
   Menu, 
   X, 
-  ShieldCheck, 
-  ChevronRight,
-  ExternalLink,
-  Lock
+  ArrowRight,
+  MessageCircle,
+  Briefcase
 } from 'lucide-react'
-import { socialConfig } from '../../config/socialLinks'
+import { useSettings } from '../../context/SettingsContext'
 
 export const Navbar = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const location = useLocation()
+  const { settings } = useSettings()
 
   const navLinks = [
     { name: 'Home', path: '/' },
     { name: 'About Us', path: '/about' },
-    { name: 'Jobs', path: '/jobs' },
+    { name: 'Foreign Jobs', path: '/jobs' },
+    { name: 'Our Services', path: '/#services' },
+    { name: 'Gallery', path: '/gallery' },
+    { name: 'Testimonials', path: '/reviews' },
     { name: 'Contact Us', path: '/contact' }
   ]
 
   const isActive = (path) => {
     if (path === '/') return location.pathname === '/'
+    if (path.startsWith('/#')) return false
     return location.pathname.startsWith(path)
   }
 
+  const cleanWhatsappNumber = (settings?.whatsapp || '').replace(/[^0-9]/g, '')
+  const whatsappUrl = cleanWhatsappNumber
+    ? `https://wa.me/${cleanWhatsappNumber}?text=${encodeURIComponent('Hello Joy Manpower Solution, I am inquiring about overseas job vacancies.')}`
+    : '#'
+
   return (
-    <header className="w-full sticky top-0 z-50 bg-white shadow-xs border-b border-[#E5E7EB]">
-      {/* Top Header Bar in Deep Teal #087F8C */}
-      <div className="bg-[#087F8C] text-white text-xs py-2 px-3 sm:px-6">
+    <header className="w-full sticky top-0 z-50 shadow-md">
+      {/* ========================================================
+          A. TOP CONTACT BAR: Deep Purple #26075D / #321078
+         ======================================================== */}
+      <div className="bg-[#26075D] text-white text-xs py-2 px-3 sm:px-6 border-b border-[#3E0F87]">
         <div className="max-w-7xl mx-auto flex flex-wrap justify-between items-center gap-2">
-          {/* Left Specialization & Contacts */}
-          <div className="flex items-center gap-3 sm:gap-6 flex-wrap">
-            <span className="flex items-center gap-1.5 text-[#EDF9F3] font-medium">
-              <ShieldCheck className="w-3.5 h-3.5 shrink-0 text-[#20A66A] bg-white rounded-full" />
-              <span className="truncate">Specialized Overseas Recruitment: <strong>UAE (Dubai)</strong> & <strong>Saudi Arabia</strong></span>
-            </span>
-
-            <a 
-              href="tel:+919876543210" 
-              className="hidden md:flex items-center gap-1.5 text-white/90 hover:text-white transition-colors"
-            >
-              <Phone className="w-3 h-3 text-[#AEE6C8]" />
-              <span>+91 98765 43210</span>
-            </a>
-
-            <a 
-              href="mailto:info@joymanpowersolution.com" 
-              className="hidden lg:flex items-center gap-1.5 text-white/90 hover:text-white transition-colors"
-            >
-              <Mail className="w-3 h-3 text-[#AEE6C8]" />
-              <span>info@joymanpowersolution.com</span>
-            </a>
-          </div>
-
-          {/* Right WhatsApp & Admin Link */}
-          <div className="flex items-center gap-3 shrink-0 ml-auto sm:ml-0">
-            <a
-              href={socialConfig.whatsapp.url}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-1 text-[#087F8C] bg-white hover:bg-emerald-50 px-2.5 py-0.5 rounded-full font-bold transition-colors text-xs shadow-xs"
-            >
-              <span>WhatsApp Chat</span>
-              <ExternalLink className="w-3 h-3 text-[#20A66A]" />
-            </a>
-
-            <span className="text-white/40">|</span>
-
-            <Link
-              to="/admin/login"
-              className="inline-flex items-center gap-1 text-white/90 hover:text-white transition-colors text-[11px] bg-[#065A64] hover:bg-[#054850] px-2 py-0.5 rounded"
-              title="Admin Staff Login"
-            >
-              <Lock className="w-3 h-3 text-[#AEE6C8]" />
-              <span>Admin</span>
-            </Link>
-          </div>
-        </div>
-      </div>
-
-      {/* Main Navbar */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center h-20">
-          {/* Logo with Modern Deep Teal & Fresh Green */}
-          <Link to="/" className="flex items-center gap-3 group shrink-0">
-            <div className="w-11 h-11 sm:w-12 sm:h-12 rounded-xl bg-[#087F8C] border border-[#065A64] flex items-center justify-center shadow-xs group-hover:bg-[#076F7B] transition-colors">
-              <span className="text-xl sm:text-2xl font-black tracking-tight text-white">
-                J<span className="text-[#20A66A]">MS</span>
-              </span>
-            </div>
-            <div>
-              <div className="text-lg sm:text-xl font-black text-[#202B33] tracking-tight leading-tight flex items-center gap-1">
-                <span>JOY MANPOWER</span>
-              </div>
-              <p className="text-[10px] sm:text-[11px] font-bold tracking-wider text-[#087F8C] uppercase">
-                Overseas Job Consultancy
-              </p>
-            </div>
-          </Link>
-
-          {/* Desktop Navigation */}
-          <nav className="hidden md:flex items-center gap-1 lg:gap-2">
-            {navLinks.map((link) => (
-              <Link
-                key={link.name}
-                to={link.path}
-                className={`px-3.5 py-2 rounded-lg text-sm font-semibold transition-all duration-150 ${
-                  isActive(link.path)
-                    ? 'text-[#087F8C] bg-[#F0F9FA] font-bold border border-[#B2E3E8]'
-                    : 'text-[#64748B] hover:text-[#087F8C] hover:bg-[#F5F8F9]'
-                }`}
+          {/* Left Contact Items */}
+          <div className="flex items-center gap-3 sm:gap-6 flex-wrap text-[11px] sm:text-xs">
+            {settings?.phone && (
+              <a 
+                href={`tel:${settings.phone.replace(/[^0-9+]/g, '')}`}
+                className="flex items-center gap-1.5 text-slate-200 hover:text-[#FFC900] transition-colors"
               >
-                {link.name}
-              </Link>
-            ))}
-          </nav>
+                <Phone className="w-3.5 h-3.5 text-[#FFC900] shrink-0" />
+                <span className="font-medium">{settings.phone}</span>
+              </a>
+            )}
 
-          {/* Desktop Explore Jobs CTA Button */}
-          <div className="hidden md:flex items-center gap-3">
-            <Link
-              to="/jobs"
-              className="inline-flex items-center gap-2 bg-[#087F8C] hover:bg-[#076F7B] text-white text-sm font-bold px-5 py-2.5 rounded-xl shadow-xs hover:shadow transition-all duration-150 active:scale-95"
-            >
-              <Briefcase className="w-4 h-4 text-white" />
-              <span>Explore Jobs</span>
-            </Link>
+            {settings?.whatsapp && (
+              <a 
+                href={whatsappUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="hidden xs:flex items-center gap-1.5 text-slate-200 hover:text-[#16B83D] transition-colors"
+              >
+                <MessageCircle className="w-3.5 h-3.5 text-[#16B83D] shrink-0" />
+                <span className="font-medium">WhatsApp: {settings.whatsapp_display || settings.whatsapp}</span>
+              </a>
+            )}
+
+            {settings?.email && (
+              <a 
+                href={`mailto:${settings.email}`}
+                className="hidden md:flex items-center gap-1.5 text-slate-200 hover:text-[#FFC900] transition-colors"
+              >
+                <Mail className="w-3.5 h-3.5 text-[#FFC900] shrink-0" />
+                <span className="font-medium">{settings.email}</span>
+              </a>
+            )}
+
+            {settings?.location && (
+              <div className="hidden lg:flex items-center gap-1.5 text-slate-300">
+                <MapPin className="w-3.5 h-3.5 text-[#FFC900] shrink-0" />
+                <span>{settings.location}</span>
+              </div>
+            )}
           </div>
 
-          {/* Mobile Actions: Jobs button + Hamburger */}
-          <div className="flex md:hidden items-center gap-2">
-            <Link
-              to="/jobs"
-              className="bg-[#087F8C] text-white text-xs font-bold px-3 py-1.5 rounded-lg active:scale-95 transition-transform"
-            >
-              Jobs
-            </Link>
-            <button
-              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="p-2 rounded-lg text-[#202B33] hover:text-[#087F8C] hover:bg-[#F5F8F9] focus:outline-none"
-              aria-label="Toggle navigation menu"
-              aria-expanded={mobileMenuOpen}
-            >
-              {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
-            </button>
+          {/* Right Follow Us Social Media Icons */}
+          <div className="flex items-center gap-3 ml-auto sm:ml-0 text-[11px]">
+            <span className="text-slate-300 hidden sm:inline font-medium">Follow Us:</span>
+            <div className="flex items-center gap-1.5">
+              {settings?.facebook_url && (
+                <a
+                  href={settings.facebook_url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-6 h-6 rounded-full bg-[#321078] hover:bg-[#FFC900] text-white hover:text-[#26075D] flex items-center justify-center transition-colors font-bold text-[10px]"
+                  title="Facebook"
+                  aria-label="Facebook"
+                >
+                  f
+                </a>
+              )}
+              {settings?.youtube_url && (
+                <a
+                  href={settings.youtube_url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-6 h-6 rounded-full bg-[#321078] hover:bg-[#FFC900] text-white hover:text-[#26075D] flex items-center justify-center transition-colors font-bold text-[10px]"
+                  title="YouTube"
+                  aria-label="YouTube"
+                >
+                  yt
+                </a>
+              )}
+              {settings?.linkedin_url && (
+                <a
+                  href={settings.linkedin_url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-6 h-6 rounded-full bg-[#321078] hover:bg-[#FFC900] text-white hover:text-[#26075D] flex items-center justify-center transition-colors font-bold text-[10px]"
+                  title="LinkedIn"
+                  aria-label="LinkedIn"
+                >
+                  in
+                </a>
+              )}
+              {settings?.instagram_url && (
+                <a
+                  href={settings.instagram_url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-6 h-6 rounded-full bg-[#321078] hover:bg-[#FFC900] text-white hover:text-[#26075D] flex items-center justify-center transition-colors font-bold text-[10px]"
+                  title="Instagram"
+                  aria-label="Instagram"
+                >
+                  ig
+                </a>
+              )}
+            </div>
           </div>
         </div>
       </div>
 
-      {/* Mobile Menu Drawer */}
-      {mobileMenuOpen && (
-        <div className="md:hidden border-t border-[#E5E7EB] bg-white px-4 pt-3 pb-6 space-y-2 shadow-lg animate-fadeIn">
-          {navLinks.map((link) => (
-            <Link
-              key={link.name}
-              to={link.path}
-              onClick={() => setMobileMenuOpen(false)}
-              className={`flex items-center justify-between px-4 py-3 rounded-xl text-base font-semibold ${
-                isActive(link.path)
-                  ? 'bg-[#F0F9FA] text-[#087F8C] border border-[#B2E3E8] font-bold'
-                  : 'text-[#202B33] hover:bg-[#F5F8F9]'
-              }`}
-            >
-              <span>{link.name}</span>
-              <ChevronRight className="w-4 h-4 text-[#64748B]" />
+      {/* ========================================================
+          B. MAIN NAVIGATION: Crisp White Background
+         ======================================================== */}
+      <nav className="bg-white border-b border-[#E9EBF0]">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex justify-between items-center h-20">
+            {/* Left: Joy Manpower Solution Logo */}
+            <Link to="/" className="flex items-center gap-3 group shrink-0">
+              {/* Emblem / Logo from B2 */}
+              {settings?.logo_url ? (
+                <div className="h-12 w-12 rounded-xl bg-white border border-[#DDD0F3] p-1 flex items-center justify-center shadow-xs overflow-hidden group-hover:scale-105 transition-transform">
+                  <img
+                    src={settings.logo_url}
+                    alt={settings.company_name || 'Joy Manpower Solution'}
+                    className="max-h-full max-w-full object-contain"
+                  />
+                </div>
+              ) : (
+                <div className="w-12 h-12 rounded-xl bg-[#321078] border-2 border-[#FFC900] flex items-center justify-center shadow-md group-hover:scale-105 transition-transform">
+                  <span className="text-xl font-black text-[#FFC900] tracking-tighter">
+                    J<span className="text-white">MS</span>
+                  </span>
+                </div>
+              )}
+              <div className="flex flex-col">
+                <span className="text-base sm:text-lg font-black text-[#26075D] tracking-tight leading-tight">
+                  {settings?.company_name || 'JOY MANPOWER SOLUTION'}
+                </span>
+                <span className="text-[10px] sm:text-[11px] text-[#5015A8] font-bold uppercase tracking-wider">
+                  Overseas Recruitment Services
+                </span>
+              </div>
             </Link>
-          ))}
 
-          <div className="pt-3 border-t border-[#E5E7EB] space-y-2">
-            <Link
-              to="/jobs"
-              onClick={() => setMobileMenuOpen(false)}
-              className="w-full flex items-center justify-center gap-2 bg-[#087F8C] hover:bg-[#076F7B] text-white font-bold py-3 rounded-xl shadow-xs"
-            >
-              <Briefcase className="w-4 h-4" />
-              <span>Browse All Vacancies</span>
-            </Link>
-            <Link
-              to="/admin/login"
-              onClick={() => setMobileMenuOpen(false)}
-              className="w-full flex items-center justify-center gap-2 bg-[#F5F8F9] hover:bg-slate-200 text-[#202B33] font-medium py-2.5 rounded-xl text-xs border border-[#E5E7EB]"
-            >
-              <Lock className="w-3.5 h-3.5 text-[#087F8C]" />
-              <span>Admin Staff Portal</span>
-            </Link>
+            {/* Desktop Navigation Links */}
+            <div className="hidden lg:flex items-center gap-6 xl:gap-8">
+              {navLinks.map((link) => {
+                const active = isActive(link.path)
+                return (
+                  <Link
+                    key={link.name}
+                    to={link.path}
+                    className={`text-sm font-semibold transition-colors duration-150 py-1 border-b-2 ${
+                      active
+                        ? 'text-[#321078] border-[#FFC900] font-bold'
+                        : 'text-[#252039] border-transparent hover:text-[#321078]'
+                    }`}
+                  >
+                    {link.name}
+                  </Link>
+                )
+              })}
+            </div>
+
+            {/* Right: Apply Now Yellow CTA Button */}
+            <div className="hidden sm:flex items-center gap-3">
+              <Link
+                to="/jobs"
+                className="inline-flex items-center gap-2 bg-[#FFC900] hover:bg-[#F5B900] text-[#26075D] font-extrabold px-6 py-2.5 rounded-full shadow-md hover:shadow-lg transition-all duration-150 active:scale-95 text-xs sm:text-sm uppercase tracking-wide"
+              >
+                <span>Apply Now</span>
+                <ArrowRight className="w-4 h-4 stroke-[3]" />
+              </Link>
+            </div>
+
+            {/* Mobile Hamburger Menu Toggle */}
+            <div className="lg:hidden flex items-center gap-2">
+              <Link
+                to="/jobs"
+                className="sm:hidden inline-flex items-center px-3.5 py-1.5 rounded-full bg-[#FFC900] text-[#26075D] text-xs font-black shadow-xs"
+              >
+                Apply
+              </Link>
+
+              <button
+                onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+                className="p-2 rounded-xl text-[#26075D] hover:bg-[#F7F4FC] focus:outline-none"
+                aria-label="Toggle Navigation Menu"
+              >
+                {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+              </button>
+            </div>
           </div>
         </div>
-      )}
+
+        {/* Mobile Navigation Drawer */}
+        {mobileMenuOpen && (
+          <div className="lg:hidden bg-white border-t border-[#E9EBF0] px-4 pt-3 pb-6 space-y-3 shadow-xl animate-fadeIn">
+            <div className="flex flex-col space-y-1">
+              {navLinks.map((link) => {
+                const active = isActive(link.path)
+                return (
+                  <Link
+                    key={link.name}
+                    to={link.path}
+                    onClick={() => setMobileMenuOpen(false)}
+                    className={`px-3 py-2.5 rounded-xl text-sm font-semibold transition-colors ${
+                      active
+                        ? 'bg-[#F7F4FC] text-[#321078] font-bold border-l-4 border-[#321078]'
+                        : 'text-[#252039] hover:bg-slate-50'
+                    }`}
+                  >
+                    {link.name}
+                  </Link>
+                )
+              })}
+            </div>
+
+            {/* Mobile Apply Button */}
+            <div className="pt-2">
+              <Link
+                to="/jobs"
+                onClick={() => setMobileMenuOpen(false)}
+                className="w-full inline-flex items-center justify-center gap-2 bg-[#FFC900] hover:bg-[#F5B900] text-[#26075D] font-black py-3 rounded-xl shadow-md text-sm uppercase tracking-wider"
+              >
+                <span>Apply For Gulf Jobs</span>
+                <ArrowRight className="w-4 h-4 stroke-[3]" />
+              </Link>
+            </div>
+
+            {/* Mobile Contact Quick Links */}
+            <div className="pt-3 border-t border-slate-100 space-y-1 text-xs text-slate-600">
+              {settings?.phone && (
+                <div className="flex items-center gap-2 py-1">
+                  <Phone className="w-3.5 h-3.5 text-[#321078]" />
+                  <span>{settings.phone}</span>
+                </div>
+              )}
+              {settings?.whatsapp && (
+                <a
+                  href={whatsappUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-2 py-1 text-[#16B83D] font-bold"
+                >
+                  <MessageCircle className="w-3.5 h-3.5 text-[#16B83D]" />
+                  <span>WhatsApp: {settings.whatsapp_display || settings.whatsapp}</span>
+                </a>
+              )}
+            </div>
+          </div>
+        )}
+      </nav>
     </header>
   )
 }

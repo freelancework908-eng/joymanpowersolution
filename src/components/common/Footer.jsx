@@ -1,142 +1,234 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 import { 
-  Briefcase, 
-  MapPin, 
   Phone, 
   Mail, 
+  MapPin, 
   Clock, 
+  ArrowRight, 
   ShieldCheck, 
-  ArrowRight,
-  ExternalLink,
+  MessageCircle,
+  Briefcase,
   Lock
 } from 'lucide-react'
-import { getActiveSocialLinks, socialConfig } from '../../config/socialLinks'
+import { useSettings } from '../../context/SettingsContext'
 
 export const Footer = () => {
-  const activeSocials = getActiveSocialLinks()
+  const { settings } = useSettings()
+
+  const cleanWhatsapp = (settings?.whatsapp || '').replace(/[^0-9]/g, '')
+  const whatsappUrl = cleanWhatsapp
+    ? `https://wa.me/${cleanWhatsapp}?text=${encodeURIComponent('Hello Joy Manpower Solution, I am inquiring about overseas job vacancies.')}`
+    : '#'
 
   return (
-    <footer className="bg-[#F5F8F9] text-[#64748B] border-t-4 border-[#087F8C] pt-14 pb-8">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Main Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-10 pb-10 border-b border-[#E5E7EB]">
-          {/* Column 1: Brand & Purpose */}
+    <footer className="bg-[#26075D] text-slate-300 border-t-4 border-[#FFC900]">
+      {/* Top Pre-Footer Bar: Build Your Global Career */}
+      <div className="bg-[#321078] py-8 border-b border-[#3E0F87]">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-center justify-between gap-6">
+          <div className="space-y-1 text-center md:text-left">
+            <h3 className="text-xl sm:text-2xl font-black text-white">
+              Build Your Global Career with Joy Manpower Solution
+            </h3>
+            <p className="text-xs sm:text-sm text-slate-200">
+              Verified employer sponsor visas for Saudi Arabia and Dubai (UAE). Zero hidden charges.
+            </p>
+          </div>
+
+          <div className="flex flex-wrap items-center justify-center gap-3">
+            <a
+              href={whatsappUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 bg-[#16B83D] hover:bg-[#139C34] text-white font-extrabold px-6 py-3 rounded-full text-xs sm:text-sm shadow-md transition-transform active:scale-95"
+            >
+              <MessageCircle className="w-4 h-4 fill-white" />
+              <span>Chat with Us on WhatsApp</span>
+            </a>
+
+            <Link
+              to="/jobs"
+              className="inline-flex items-center gap-2 bg-[#FFC900] hover:bg-[#F5B900] text-[#26075D] font-black px-6 py-3 rounded-full text-xs sm:text-sm shadow-md transition-transform active:scale-95 uppercase tracking-wide"
+            >
+              <span>Explore Vacancies</span>
+              <ArrowRight className="w-4 h-4 stroke-[3]" />
+            </Link>
+          </div>
+        </div>
+      </div>
+
+      {/* Main Footer Links & Info */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-12">
+          {/* Column 1: Company Logo & Identity */}
           <div className="space-y-4">
             <Link to="/" className="flex items-center gap-3 group">
-              <div className="w-10 h-10 rounded-xl bg-[#087F8C] border border-[#065A64] flex items-center justify-center shadow-xs">
-                <span className="text-lg font-black text-white">
-                  J<span className="text-[#20A66A]">MS</span>
-                </span>
-              </div>
+              {settings?.logo_url ? (
+                <div className="w-12 h-12 rounded-xl bg-white border border-[#3E0F87] p-1 flex items-center justify-center shadow-md overflow-hidden">
+                  <img
+                    src={settings.logo_url}
+                    alt={settings.company_name || 'Joy Manpower Solution'}
+                    className="max-h-full max-w-full object-contain"
+                  />
+                </div>
+              ) : (
+                <div className="w-12 h-12 rounded-xl bg-[#321078] border-2 border-[#FFC900] flex items-center justify-center shadow-md">
+                  <span className="text-xl font-black text-[#FFC900] tracking-tighter">
+                    J<span className="text-white">MS</span>
+                  </span>
+                </div>
+              )}
               <div>
-                <span className="text-lg font-black text-[#202B33] tracking-tight block">JOY MANPOWER</span>
-                <span className="text-[10px] uppercase tracking-wider text-[#087F8C] font-bold block">
+                <span className="text-lg font-black text-white tracking-tight block">
+                  {settings?.company_name || 'JOY MANPOWER'}
+                </span>
+                <span className="text-[10px] uppercase tracking-wider text-[#FFC900] font-bold block">
                   Overseas Job Consultancy
                 </span>
               </div>
             </Link>
 
-            <p className="text-xs sm:text-sm text-[#64748B] leading-relaxed">
-              Joy Manpower Solution is an India-based overseas recruitment consultancy dedicated exclusively to connecting certified workforce with verified corporate sponsors in <strong>UAE (Dubai)</strong> and <strong>Saudi Arabia</strong>.
+            <p className="text-xs sm:text-sm text-slate-300 leading-relaxed">
+              Joy Manpower Solution is an India-based overseas manpower recruitment consultancy dedicated exclusively to deploying certified trade workforce to corporate sponsors in <strong>Saudi Arabia</strong> and the <strong>United Arab Emirates (Dubai)</strong>.
             </p>
 
-            <div className="pt-1 flex items-center gap-2 text-xs text-[#20A66A] font-bold">
-              <ShieldCheck className="w-4 h-4 shrink-0 text-[#20A66A]" />
-              <span>100% Genuine Direct Gulf Employer Vacancies</span>
+            <div className="pt-1 flex items-center gap-2 text-xs text-[#FFC900] font-bold">
+              <ShieldCheck className="w-4 h-4 shrink-0 text-[#FFC900]" />
+              <span>100% Genuine Direct Employer Vacancies</span>
             </div>
 
-            {/* Social Icons Row */}
+            {/* Social Media Circular Links */}
             <div className="pt-2 flex items-center gap-2">
-              {activeSocials.map((social) => (
+              {settings?.facebook_url && (
                 <a
-                  key={social.id}
-                  href={social.url}
+                  href={settings.facebook_url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  aria-label={social.ariaLabel}
-                  title={social.name}
-                  className="w-8 h-8 rounded-lg bg-white hover:bg-[#087F8C] text-[#202B33] hover:text-white flex items-center justify-center transition-colors text-xs border border-[#E5E7EB] shadow-xs"
+                  aria-label="Facebook"
+                  className="w-8 h-8 rounded-full bg-[#321078] hover:bg-[#FFC900] text-white hover:text-[#26075D] flex items-center justify-center font-bold text-xs transition-colors border border-[#3E0F87]"
                 >
-                  <span className="text-xs font-bold">{social.name[0]}</span>
+                  f
                 </a>
-              ))}
+              )}
+              {settings?.youtube_url && (
+                <a
+                  href={settings.youtube_url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label="YouTube"
+                  className="w-8 h-8 rounded-full bg-[#321078] hover:bg-[#FFC900] text-white hover:text-[#26075D] flex items-center justify-center font-bold text-xs transition-colors border border-[#3E0F87]"
+                >
+                  yt
+                </a>
+              )}
+              {settings?.linkedin_url && (
+                <a
+                  href={settings.linkedin_url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label="LinkedIn"
+                  className="w-8 h-8 rounded-full bg-[#321078] hover:bg-[#FFC900] text-white hover:text-[#26075D] flex items-center justify-center font-bold text-xs transition-colors border border-[#3E0F87]"
+                >
+                  in
+                </a>
+              )}
+              {settings?.instagram_url && (
+                <a
+                  href={settings.instagram_url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label="Instagram"
+                  className="w-8 h-8 rounded-full bg-[#321078] hover:bg-[#FFC900] text-white hover:text-[#26075D] flex items-center justify-center font-bold text-xs transition-colors border border-[#3E0F87]"
+                >
+                  ig
+                </a>
+              )}
             </div>
           </div>
 
           {/* Column 2: Exclusive Destinations */}
           <div className="space-y-4">
-            <h3 className="text-[#202B33] text-sm font-bold tracking-wide uppercase border-l-2 border-[#20A66A] pl-2.5">
-              Target Destinations
+            <h3 className="text-white text-sm font-black tracking-wide uppercase border-l-4 border-[#FFC900] pl-2.5">
+              Destinations & Sectors
             </h3>
             <ul className="space-y-2.5 text-xs sm:text-sm">
               <li>
                 <Link 
-                  to="/jobs?country=UAE" 
-                  className="flex items-center justify-between text-[#64748B] hover:text-[#087F8C] transition-colors group"
+                  to="/jobs?country=Saudi Arabia" 
+                  className="flex items-center justify-between text-slate-300 hover:text-[#FFC900] transition-colors group"
                 >
                   <span className="flex items-center gap-2">
-                    <span className="text-base">🇦🇪</span>
-                    <span className="font-medium">UAE – Dubai Vacancies</span>
+                    <span>🇸🇦</span>
+                    <span className="font-semibold">Saudi Arabia Jobs</span>
                   </span>
-                  <ArrowRight className="w-3.5 h-3.5 opacity-0 group-hover:opacity-100 transition-opacity text-[#087F8C]" />
+                  <ArrowRight className="w-3.5 h-3.5 opacity-0 group-hover:opacity-100 transition-opacity text-[#FFC900]" />
                 </Link>
               </li>
               <li>
                 <Link 
-                  to="/jobs?country=Saudi Arabia" 
-                  className="flex items-center justify-between text-[#64748B] hover:text-[#087F8C] transition-colors group"
+                  to="/jobs?country=UAE" 
+                  className="flex items-center justify-between text-slate-300 hover:text-[#FFC900] transition-colors group"
                 >
                   <span className="flex items-center gap-2">
-                    <span className="text-base">🇸🇦</span>
-                    <span className="font-medium">Saudi Arabia Vacancies</span>
+                    <span>🇦🇪</span>
+                    <span className="font-semibold">Dubai & UAE Jobs</span>
                   </span>
-                  <ArrowRight className="w-3.5 h-3.5 opacity-0 group-hover:opacity-100 transition-opacity text-[#087F8C]" />
+                  <ArrowRight className="w-3.5 h-3.5 opacity-0 group-hover:opacity-100 transition-opacity text-[#FFC900]" />
                 </Link>
               </li>
             </ul>
 
-            <h4 className="text-[11px] font-bold uppercase tracking-wider text-[#202B33] pt-2">
+            <h4 className="text-[11px] font-bold uppercase tracking-wider text-slate-200 pt-2">
               Key Sectors
             </h4>
             <div className="flex flex-wrap gap-1.5 text-xs">
-              <span className="bg-white px-2 py-1 rounded-md border border-[#E5E7EB] text-[#64748B]">Facility Mgmt</span>
-              <span className="bg-white px-2 py-1 rounded-md border border-[#E5E7EB] text-[#64748B]">Construction</span>
-              <span className="bg-white px-2 py-1 rounded-md border border-[#E5E7EB] text-[#64748B]">Oil & Gas</span>
-              <span className="bg-white px-2 py-1 rounded-md border border-[#E5E7EB] text-[#64748B]">Hospitality</span>
-              <span className="bg-white px-2 py-1 rounded-md border border-[#E5E7EB] text-[#64748B]">Logistics</span>
+              <span className="bg-[#321078] px-2.5 py-1 rounded-md text-slate-200 border border-[#3E0F87]">Facility Mgmt</span>
+              <span className="bg-[#321078] px-2.5 py-1 rounded-md text-slate-200 border border-[#3E0F87]">Construction</span>
+              <span className="bg-[#321078] px-2.5 py-1 rounded-md text-slate-200 border border-[#3E0F87]">Oil & Gas</span>
+              <span className="bg-[#321078] px-2.5 py-1 rounded-md text-slate-200 border border-[#3E0F87]">Hospitality</span>
+              <span className="bg-[#321078] px-2.5 py-1 rounded-md text-slate-200 border border-[#3E0F87]">Logistics</span>
             </div>
           </div>
 
-          {/* Column 3: Quick Links */}
+          {/* Column 3: Quick Navigation */}
           <div className="space-y-4">
-            <h3 className="text-[#202B33] text-sm font-bold tracking-wide uppercase border-l-2 border-[#20A66A] pl-2.5">
+            <h3 className="text-white text-sm font-black tracking-wide uppercase border-l-4 border-[#FFC900] pl-2.5">
               Quick Links
             </h3>
             <ul className="space-y-2 text-xs sm:text-sm">
               <li>
-                <Link to="/" className="text-[#64748B] hover:text-[#087F8C] transition-colors">
+                <Link to="/" className="text-slate-300 hover:text-[#FFC900] transition-colors">
                   Home
                 </Link>
               </li>
               <li>
-                <Link to="/about" className="text-[#64748B] hover:text-[#087F8C] transition-colors">
-                  About Our Agency
+                <Link to="/about" className="text-slate-300 hover:text-[#FFC900] transition-colors">
+                  About Us
                 </Link>
               </li>
               <li>
-                <Link to="/jobs" className="text-[#64748B] hover:text-[#087F8C] transition-colors">
-                  Browse Active Vacancies
+                <Link to="/jobs" className="text-slate-300 hover:text-[#FFC900] transition-colors">
+                  Foreign Jobs Catalog
                 </Link>
               </li>
               <li>
-                <Link to="/contact" className="text-[#64748B] hover:text-[#087F8C] transition-colors">
-                  Contact & Assistance
+                <Link to="/gallery" className="text-slate-300 hover:text-[#FFC900] transition-colors">
+                  Recruitment Gallery
                 </Link>
               </li>
               <li>
-                <Link to="/admin/login" className="text-[#64748B] hover:text-[#087F8C] transition-colors inline-flex items-center gap-1.5 pt-1 font-medium">
-                  <Lock className="w-3 h-3 text-[#087F8C]" />
+                <Link to="/reviews" className="text-slate-300 hover:text-[#FFC900] transition-colors">
+                  Candidate Success Stories
+                </Link>
+              </li>
+              <li>
+                <Link to="/contact" className="text-slate-300 hover:text-[#FFC900] transition-colors">
+                  Contact Us
+                </Link>
+              </li>
+              <li>
+                <Link to="/admin/login" className="text-slate-300 hover:text-[#FFC900] transition-colors inline-flex items-center gap-1.5 pt-1 font-medium">
+                  <Lock className="w-3 h-3 text-[#FFC900]" />
                   <span>Admin Staff Portal</span>
                 </Link>
               </li>
@@ -145,52 +237,58 @@ export const Footer = () => {
 
           {/* Column 4: Contact Information */}
           <div className="space-y-4">
-            <h3 className="text-[#202B33] text-sm font-bold tracking-wide uppercase border-l-2 border-[#20A66A] pl-2.5">
-              Contact Details
+            <h3 className="text-white text-sm font-black tracking-wide uppercase border-l-4 border-[#FFC900] pl-2.5">
+              Contact Information
             </h3>
-            <ul className="space-y-3 text-xs sm:text-sm text-[#64748B]">
-              <li className="flex items-start gap-2.5">
-                <MapPin className="w-4 h-4 text-[#087F8C] shrink-0 mt-0.5" />
-                <span>Head Office: Mumbai / New Delhi, India</span>
-              </li>
-              <li className="flex items-center gap-2.5">
-                <Phone className="w-4 h-4 text-[#087F8C] shrink-0" />
-                <a href="tel:+919876543210" className="hover:text-[#087F8C] transition-colors font-medium">
-                  +91 98765 43210
-                </a>
-              </li>
-              <li className="flex items-center gap-2.5">
-                <Mail className="w-4 h-4 text-[#087F8C] shrink-0" />
-                <a href="mailto:info@joymanpowersolution.com" className="hover:text-[#087F8C] transition-colors truncate">
-                  info@joymanpowersolution.com
-                </a>
-              </li>
-              <li className="flex items-center gap-2.5">
-                <Clock className="w-4 h-4 text-[#087F8C] shrink-0" />
-                <span>Mon – Sat: 9:30 AM – 6:30 PM (IST)</span>
-              </li>
+            <ul className="space-y-3 text-xs sm:text-sm">
+              {settings?.address && (
+                <li className="flex items-start gap-2.5">
+                  <MapPin className="w-4 h-4 text-[#FFC900] shrink-0 mt-0.5" />
+                  <span className="text-slate-300 leading-snug">{settings.address}</span>
+                </li>
+              )}
+              {settings?.phone && (
+                <li className="flex items-center gap-2.5">
+                  <Phone className="w-4 h-4 text-[#FFC900] shrink-0" />
+                  <a href={`tel:${settings.phone.replace(/[^0-9+]/g, '')}`} className="text-slate-300 hover:text-[#FFC900]">
+                    {settings.phone}
+                  </a>
+                </li>
+              )}
+              {settings?.whatsapp && (
+                <li className="flex items-center gap-2.5">
+                  <MessageCircle className="w-4 h-4 text-[#16B83D] shrink-0" />
+                  <a href={whatsappUrl} target="_blank" rel="noopener noreferrer" className="text-slate-300 hover:text-[#16B83D] font-bold">
+                    WhatsApp: {settings.whatsapp_display || settings.whatsapp}
+                  </a>
+                </li>
+              )}
+              {settings?.email && (
+                <li className="flex items-center gap-2.5">
+                  <Mail className="w-4 h-4 text-[#FFC900] shrink-0" />
+                  <a href={`mailto:${settings.email}`} className="text-slate-300 hover:text-[#FFC900] truncate">
+                    {settings.email}
+                  </a>
+                </li>
+              )}
+              {settings?.working_hours && (
+                <li className="flex items-center gap-2.5 text-slate-300 text-[11px]">
+                  <Clock className="w-4 h-4 text-[#FFC900] shrink-0" />
+                  <span>{settings.working_hours}</span>
+                </li>
+              )}
             </ul>
-
-            <div className="pt-1">
-              <a
-                href={socialConfig.whatsapp.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 bg-[#20A66A] hover:bg-[#188E59] text-white text-xs font-bold px-4 py-2 rounded-xl transition-colors shadow-xs"
-              >
-                <span>WhatsApp Recruitment Desk</span>
-                <ExternalLink className="w-3 h-3" />
-              </a>
-            </div>
           </div>
         </div>
 
-        {/* Bottom Bar */}
-        <div className="pt-6 flex flex-col md:flex-row justify-between items-center gap-3 text-xs text-[#64748B] text-center md:text-left">
-          <p>© {new Date().getFullYear()} Joy Manpower Solution. All rights reserved.</p>
+        {/* Bottom Copyright Strip */}
+        <div className="pt-8 mt-8 border-t border-[#3E0F87] flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-400">
           <p>
-            Overseas job placements exclusively in <strong>UAE (Dubai)</strong> and <strong>Saudi Arabia</strong>.
+            © {new Date().getFullYear()} Joy Manpower Solution. All rights reserved.
           </p>
+          <div className="flex items-center gap-4">
+            <span className="text-[#FFC900] font-bold">UAE & Saudi Arabia Recruitment Specialist</span>
+          </div>
         </div>
       </div>
     </footer>

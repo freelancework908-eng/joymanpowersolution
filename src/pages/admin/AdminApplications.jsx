@@ -214,16 +214,15 @@ export const AdminApplications = () => {
 
                     {/* Resume File Link */}
                     <td className="py-4 px-4 whitespace-nowrap">
-                      {app.resume_url && app.resume_url !== '#' ? (
-                        <a
-                          href={app.resume_url}
-                          target="_blank"
-                          rel="noopener noreferrer"
+                      {app.resume_path ? (
+                        <button
+                          type="button"
+                          onClick={() => applicationService.downloadResume(app.id, app.candidate_name)}
                           className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-primary-50 hover:bg-primary-100 text-primary-700 text-xs font-bold transition-colors"
                         >
                           <Download className="w-3.5 h-3.5" />
                           <span>Download</span>
-                        </a>
+                        </button>
                       ) : (
                         <span className="inline-flex items-center gap-1 text-slate-400 text-xs">
                           <FileText className="w-3.5 h-3.5" />
@@ -345,17 +344,16 @@ export const AdminApplications = () => {
               </div>
 
               {/* Resume download */}
-              {selectedCandidate.resume_url && selectedCandidate.resume_url !== '#' && (
+              {selectedCandidate.resume_path && (
                 <div className="pt-2">
-                  <a
-                    href={selectedCandidate.resume_url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="w-full inline-flex items-center justify-center gap-2 py-3 px-4 rounded-xl bg-primary-500 hover:bg-primary-600 text-white font-bold text-xs transition-colors"
+                  <button
+                    type="button"
+                    onClick={() => applicationService.downloadResume(selectedCandidate.id, selectedCandidate.candidate_name)}
+                    className="w-full inline-flex items-center justify-center gap-2 py-3 px-4 rounded-xl bg-primary-500 hover:bg-primary-600 text-white font-bold text-xs transition-colors shadow-sm"
                   >
                     <Download className="w-4 h-4" />
                     <span>Download Uploaded Resume File</span>
-                  </a>
+                  </button>
                 </div>
               )}
             </div>

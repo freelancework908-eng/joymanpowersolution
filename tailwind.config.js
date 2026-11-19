@@ -7,58 +7,70 @@ export default {
   theme: {
     extend: {
       colors: {
-        // Primary: Deep Teal (#087F8C)
+        // Primary Purple (#321078)
         primary: {
-          DEFAULT: '#087F8C',
-          50: '#F0F9FA',
-          100: '#D8F1F3',
-          200: '#B2E3E8',
-          300: '#7BCFDA',
-          400: '#3FB5C5',
-          500: '#087F8C',
-          600: '#076F7B',
-          700: '#065A64',
-          800: '#054850',
-          900: '#04363C',
-          950: '#021F23',
+          DEFAULT: '#321078',
+          50: '#F7F4FC',
+          100: '#EFE9F9',
+          200: '#DDD0F3',
+          300: '#C4ADEA',
+          400: '#9B74DB',
+          500: '#753DC9',
+          600: '#5015A8', // Secondary Purple
+          700: '#3E0F87',
+          800: '#321078', // Primary Purple
+          900: '#26075D', // Dark Purple
+          950: '#18043D',
         },
-        // Secondary: Fresh Green (#20A66A)
-        secondary: {
-          DEFAULT: '#20A66A',
-          50: '#EDF9F3',
-          100: '#D6F2E3',
-          200: '#AEE6C8',
-          300: '#7FD7AA',
-          400: '#4DC68B',
-          500: '#20A66A',
-          600: '#188E59',
-          700: '#147248',
-          800: '#115B3A',
-          900: '#0E4A30',
-          950: '#072B1B',
+        // Secondary Purple (#5015A8)
+        purpleSecondary: '#5015A8',
+        darkPurple: '#26075D',
+        lightLavender: '#F7F4FC',
+        lightGrey: '#F4F5F8',
+        darkText: '#252039',
+        
+        // Highlight Yellow (#FFC900) & Secondary Yellow (#F5B900)
+        yellowHighlight: {
+          DEFAULT: '#FFC900',
+          hover: '#F5B900',
+          dark: '#E0A800',
+          light: '#FFF5CC',
         },
-        // Heading: Dark Charcoal (#202B33)
+        // Direct yellow palette aliases for ease of use
+        accentYellow: '#FFC900',
+        accentYellowHover: '#F5B900',
+        
+        // WhatsApp Green (#16B83D)
+        whatsappGreen: {
+          DEFAULT: '#16B83D',
+          hover: '#139C34',
+          dark: '#0F7C2A',
+          light: '#E7F8EC',
+        },
+        
+        // Charcoal / Dark text
         charcoal: {
-          DEFAULT: '#202B33',
-          50: '#F6F8F9',
-          100: '#EDF1F3',
-          200: '#DBE2E6',
-          300: '#C1CCD3',
-          400: '#8B9DAA',
-          500: '#5C7080',
-          600: '#394B59',
-          700: '#2B3842',
-          800: '#202B33',
-          900: '#182026',
-          950: '#0F1418',
+          DEFAULT: '#252039',
+          50: '#F4F5F8',
+          100: '#E9EBF0',
+          200: '#D3D6DF',
+          300: '#A9AFC2',
+          400: '#7C84A0',
+          500: '#58617F',
+          600: '#414963',
+          700: '#31374E',
+          800: '#252039',
+          900: '#191527',
+          950: '#0F0D18',
         },
-        heading: '#202B33',
-        bodytext: '#64748B',
-        sectionbg: '#F5F8F9',
-        borderlight: '#E5E7EB',
+        
+        heading: '#252039',
+        bodytext: '#58617F',
+        sectionbg: '#F7F4FC',
+        borderlight: '#E9EBF0',
       },
       fontFamily: {
-        sans: ['Inter', 'system-ui', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'sans-serif'],
+        sans: ['Poppins', 'Inter', 'system-ui', '-apple-system', 'sans-serif'],
       }
     },
   },

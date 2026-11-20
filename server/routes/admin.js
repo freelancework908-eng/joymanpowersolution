@@ -162,7 +162,18 @@ router.get('/jobs', async (req, res) => {
 
     sql += ' ORDER BY created_at DESC;';
     const jobs = await query(sql, params);
-    const normalized = jobs.map((j) => ({ ...j, deadline: j.application_deadline }));
+    const normalized = jobs.map((j) => ({
+      ...j,
+      deadline: j.application_deadline,
+      salary_currency: j.salary_currency || '',
+      working_hours: j.working_hours || null,
+      overtime_details: j.overtime_details || null,
+      accommodation_details: j.accommodation_details || null,
+      transportation_details: j.transportation_details || null,
+      basic_salary: j.basic_salary || null,
+      compulsory_ot_salary: j.compulsory_ot_salary || null,
+      image_url: j.image_url || null,
+    }));
     return res.json({ success: true, data: normalized });
   } catch (err) {
     console.error('[Admin Jobs Error]:', err);
@@ -186,6 +197,14 @@ router.post('/jobs', async (req, res) => {
       benefits,
       deadline,
       status,
+      salary_currency,
+      working_hours,
+      overtime_details,
+      accommodation_details,
+      transportation_details,
+      basic_salary,
+      compulsory_ot_salary,
+      image_url,
     } = req.body;
 
     if (!title || !country || !location || !category || !salary) {
@@ -196,8 +215,8 @@ router.post('/jobs', async (req, res) => {
 
     const result = await query(
       `INSERT INTO jobs 
-       (title, country, location, category, salary, vacancies, experience, qualification, description, responsibilities, benefits, application_deadline, status, created_at, updated_at) 
-       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW(), NOW());`,
+       (title, country, location, category, salary, vacancies, experience, qualification, description, responsibilities, benefits, application_deadline, status, salary_currency, working_hours, overtime_details, accommodation_details, transportation_details, basic_salary, compulsory_ot_salary, image_url, created_at, updated_at) 
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW(), NOW());`,
       [
         title.trim(),
         country,
@@ -212,6 +231,14 @@ router.post('/jobs', async (req, res) => {
         benefits?.trim() || '',
         cleanDeadline,
         status || 'published',
+        salary_currency?.trim() || '',
+        working_hours?.trim() || null,
+        overtime_details?.trim() || null,
+        accommodation_details?.trim() || null,
+        transportation_details?.trim() || null,
+        basic_salary?.trim() || null,
+        compulsory_ot_salary?.trim() || null,
+        image_url?.trim() || null,
       ]
     );
 
@@ -219,7 +246,18 @@ router.post('/jobs', async (req, res) => {
     return res.status(201).json({
       success: true,
       message: 'Job vacancy created successfully',
-      data: { ...newJob[0], deadline: newJob[0].application_deadline }
+      data: {
+        ...newJob[0],
+        deadline: newJob[0].application_deadline,
+        salary_currency: newJob[0].salary_currency || '',
+        working_hours: newJob[0].working_hours || null,
+        overtime_details: newJob[0].overtime_details || null,
+        accommodation_details: newJob[0].accommodation_details || null,
+        transportation_details: newJob[0].transportation_details || null,
+        basic_salary: newJob[0].basic_salary || null,
+        compulsory_ot_salary: newJob[0].compulsory_ot_salary || null,
+        image_url: newJob[0].image_url || null,
+      }
     });
   } catch (err) {
     console.error('[Admin Create Job Error]:', err);
@@ -244,6 +282,14 @@ router.put('/jobs/:id', async (req, res) => {
       benefits,
       deadline,
       status,
+      salary_currency,
+      working_hours,
+      overtime_details,
+      accommodation_details,
+      transportation_details,
+      basic_salary,
+      compulsory_ot_salary,
+      image_url,
     } = req.body;
 
     const cleanDeadline = deadline && deadline.trim() ? deadline.trim() : null;
@@ -252,7 +298,9 @@ router.put('/jobs/:id', async (req, res) => {
       `UPDATE jobs SET 
          title = ?, country = ?, location = ?, category = ?, salary = ?, vacancies = ?, 
          experience = ?, qualification = ?, description = ?, responsibilities = ?, benefits = ?, 
-         application_deadline = ?, status = ?, updated_at = NOW() 
+         application_deadline = ?, status = ?, salary_currency = ?, working_hours = ?,
+         overtime_details = ?, accommodation_details = ?, transportation_details = ?,
+         basic_salary = ?, compulsory_ot_salary = ?, image_url = ?, updated_at = NOW() 
        WHERE id = ?;`,
       [
         title.trim(),
@@ -268,6 +316,14 @@ router.put('/jobs/:id', async (req, res) => {
         benefits?.trim() || '',
         cleanDeadline,
         status || 'published',
+        salary_currency?.trim() || '',
+        working_hours?.trim() || null,
+        overtime_details?.trim() || null,
+        accommodation_details?.trim() || null,
+        transportation_details?.trim() || null,
+        basic_salary?.trim() || null,
+        compulsory_ot_salary?.trim() || null,
+        image_url?.trim() || null,
         id,
       ]
     );
@@ -276,11 +332,67 @@ router.put('/jobs/:id', async (req, res) => {
     return res.json({
       success: true,
       message: 'Job vacancy updated successfully',
-      data: { ...updated[0], deadline: updated[0].application_deadline }
+      data: {
+        ...updated[0],
+        deadline: updated[0].application_deadline,
+        salary_currency: updated[0].salary_currency || '',
+        working_hours: updated[0].working_hours || null,
+        overtime_details: updated[0].overtime_details || null,
+        accommodation_details: updated[0].accommodation_details || null,
+        transportation_details: updated[0].transportation_details || null,
+        basic_salary: updated[0].basic_salary || null,
+        compulsory_ot_salary: updated[0].compulsory_ot_salary || null,
+        image_url: updated[0].image_url || null,
+      }
     });
   } catch (err) {
     console.error('[Admin Update Job Error]:', err);
     return res.status(500).json({ success: false, error: err.message || 'Failed to update job' });
+  }
+});
+
+// =========================================================================
+// 3b. CATEGORY MANAGEMENT
+// =========================================================================
+router.get('/categories', async (_req, res) => {
+  try {
+    const rows = await query('SELECT * FROM job_categories ORDER BY id ASC;');
+    return res.json({ success: true, data: rows });
+  } catch (err) {
+    console.error('[Admin Categories Error]:', err);
+    return res.status(500).json({ success: false, error: 'Failed to load categories' });
+  }
+});
+
+router.post('/categories', async (req, res) => {
+  try {
+    const { name, description } = req.body;
+    if (!name || !name.trim()) {
+      return res.status(400).json({ success: false, error: 'Category name is required' });
+    }
+    const result = await query(
+      'INSERT INTO job_categories (name, description, created_at) VALUES (?, ?, NOW());',
+      [name.trim(), description?.trim() || null]
+    );
+    return res.status(201).json({
+      success: true,
+      message: 'Category added successfully',
+      data: { id: result.insertId, name: name.trim(), description: description?.trim() || null }
+    });
+  } catch (err) {
+    console.error('[Admin Create Category Error]:', err);
+    return res.status(500).json({ success: false, error: err.message || 'Failed to add category' });
+  }
+});
+
+router.delete('/categories/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+    await query('DELETE FROM job_categories WHERE id = ?;', [id]);
+    return res.json({ success: true, message: 'Category removed successfully' });
+  } catch (err) {
+    console.error('[Admin Delete Category Error]:', err);
+    return res.status(500).json({ success: false, error: 'Failed to delete category' });
   }
 });
 

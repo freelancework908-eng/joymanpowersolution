@@ -219,10 +219,21 @@ export const JobDetails = () => {
           <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4 mt-6 sm:mt-8 pt-6 border-t border-slate-100">
             <div className="p-3.5 rounded-2xl bg-[#F7F4FC] border border-[#DDD0F3]">
               <span className="text-[10px] sm:text-[11px] font-bold uppercase tracking-wider text-slate-500 block">
-                Monthly Salary
+                Total Salary (10 hrs)
               </span>
               <span className="text-xs sm:text-sm md:text-base font-black text-[#26075D] mt-0.5 block truncate">
-                {job.salary}
+                {job.salary_currency && !String(job.salary).includes(job.salary_currency)
+                  ? `${job.salary_currency} ${job.salary}`
+                  : job.salary}
+              </span>
+            </div>
+
+            <div className="p-3.5 rounded-2xl bg-white border border-slate-200">
+              <span className="text-[10px] sm:text-[11px] font-bold uppercase tracking-wider text-slate-500 block">
+                Working Hours
+              </span>
+              <span className="text-xs sm:text-sm md:text-base font-bold text-[#26075D] mt-0.5 block truncate">
+                {job.working_hours || '10 Hours / Day'}
               </span>
             </div>
 
@@ -237,19 +248,10 @@ export const JobDetails = () => {
 
             <div className="p-3.5 rounded-2xl bg-white border border-slate-200">
               <span className="text-[10px] sm:text-[11px] font-bold uppercase tracking-wider text-slate-500 block">
-                Qualification
-              </span>
-              <span className="text-xs sm:text-sm md:text-base font-bold text-[#26075D] mt-0.5 block truncate" title={job.qualification}>
-                {job.qualification}
-              </span>
-            </div>
-
-            <div className="p-3.5 rounded-2xl bg-white border border-slate-200">
-              <span className="text-[10px] sm:text-[11px] font-bold uppercase tracking-wider text-slate-500 block">
                 Visa Category
               </span>
               <span className="text-xs sm:text-sm md:text-base font-bold text-[#26075D] mt-0.5 block">
-                Direct Employment Visa
+                Company Provided Visa
               </span>
             </div>
           </div>
@@ -259,6 +261,45 @@ export const JobDetails = () => {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 sm:gap-8">
           {/* Left Details */}
           <div className="lg:col-span-8 space-y-6 sm:space-y-8">
+            {/* Salary Breakdown & Hours Card if Available */}
+            {(job.basic_salary || job.compulsory_ot_salary || job.working_hours) && (
+              <div className="bg-white rounded-3xl border border-[#DDD0F3] p-6 sm:p-8 space-y-4">
+                <h2 className="text-base sm:text-lg font-black text-[#26075D] border-b border-slate-100 pb-3 flex items-center gap-2">
+                  <Clock className="w-5 h-5 text-[#321078]" />
+                  <span>Salary Structure & Working Conditions</span>
+                </h2>
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                  {job.basic_salary && (
+                    <div className="p-4 rounded-xl bg-[#F7F4FC] border border-[#DDD0F3]">
+                      <span className="text-[11px] font-bold text-slate-500 block">Monthly Salary (8 hrs)</span>
+                      <span className="text-lg font-black text-[#26075D] mt-1 block">
+                        {job.salary_currency ? `${job.salary_currency} ${job.basic_salary}` : job.basic_salary}
+                      </span>
+                    </div>
+                  )}
+                  {job.compulsory_ot_salary && (
+                    <div className="p-4 rounded-xl bg-[#F7F4FC] border border-[#DDD0F3]">
+                      <span className="text-[11px] font-bold text-slate-500 block">Compulsory OT (2 hrs)</span>
+                      <span className="text-lg font-black text-[#26075D] mt-1 block">
+                        {job.salary_currency ? `${job.salary_currency} ${job.compulsory_ot_salary}` : job.compulsory_ot_salary}
+                      </span>
+                    </div>
+                  )}
+                  <div className="p-4 rounded-xl bg-[#321078] text-white">
+                    <span className="text-[11px] font-bold text-[#FFC900] block">Total for 10 Hours</span>
+                    <span className="text-lg font-black text-white mt-1 block">
+                      {job.salary_currency ? `${job.salary_currency} ${job.salary}` : job.salary}
+                    </span>
+                  </div>
+                </div>
+                {job.overtime_details && (
+                  <p className="text-xs text-slate-600 bg-amber-50 border border-amber-200 p-3 rounded-xl leading-relaxed">
+                    <strong>Overtime Policy:</strong> {job.overtime_details}
+                  </p>
+                )}
+              </div>
+            )}
+
             {/* Description */}
             <div className="bg-white rounded-3xl border border-slate-200 p-6 sm:p-8 space-y-3">
               <h2 className="text-base sm:text-lg font-black text-[#26075D] border-b border-slate-100 pb-3 flex items-center gap-2">
@@ -309,18 +350,28 @@ export const JobDetails = () => {
               </ul>
             </div>
 
-            {/* Benefits */}
-            {job.benefits && (
-              <div className="bg-white rounded-3xl border border-slate-200 p-6 sm:p-8 space-y-3">
-                <h2 className="text-base sm:text-lg font-black text-[#26075D] border-b border-slate-100 pb-3 flex items-center gap-2">
-                  <Gift className="w-5 h-5 text-[#FFC900]" />
-                  <span>Company Provided Benefits & Perks</span>
-                </h2>
-                <div className="text-xs sm:text-sm text-slate-600 leading-relaxed whitespace-pre-line">
+            {/* Benefits & Provided Facilities */}
+            <div className="bg-white rounded-3xl border border-slate-200 p-6 sm:p-8 space-y-3">
+              <h2 className="text-base sm:text-lg font-black text-[#26075D] border-b border-slate-100 pb-3 flex items-center gap-2">
+                <Gift className="w-5 h-5 text-[#FFC900]" />
+                <span>Company Provided Benefits & Employment Facilities</span>
+              </h2>
+              {job.accommodation_details && (
+                <div className="p-3 bg-[#F7F4FC] rounded-xl border border-[#DDD0F3] text-xs text-slate-700">
+                  <strong>Accommodation:</strong> {job.accommodation_details}
+                </div>
+              )}
+              {job.transportation_details && (
+                <div className="p-3 bg-[#F7F4FC] rounded-xl border border-[#DDD0F3] text-xs text-slate-700">
+                  <strong>Transportation:</strong> {job.transportation_details}
+                </div>
+              )}
+              {job.benefits && (
+                <div className="text-xs sm:text-sm text-slate-600 leading-relaxed whitespace-pre-line pt-2">
                   {job.benefits}
                 </div>
-              </div>
-            )}
+              )}
+            </div>
           </div>
 
           {/* Right Sidebar */}

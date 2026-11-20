@@ -60,6 +60,10 @@ export const HomepageBanner = ({ uaeCount = 0, saudiCount = 0 }) => {
           alt={heading || 'Overseas Recruitment Saudi Arabia & Dubai'}
           className="w-full h-full object-cover object-center transform transition-transform duration-1000 ease-out"
           loading="eager"
+          onError={(e) => {
+            e.currentTarget.onerror = null;
+            e.currentTarget.src = '/gallery/jms-recruitment-reference.jpg';
+          }}
         />
       </picture>
 

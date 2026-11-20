@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Search, MapPin, Briefcase, Award, ChevronDown } from 'lucide-react'
-import { jobService } from '../../services/jobService'
+import { jobService, ALL_DEFAULT_CATEGORIES } from '../../services/jobService'
 
 export const JobSearchBar = ({ initialFilters = {}, onSearch = null }) => {
   const navigate = useNavigate()
-  const [categories, setCategories] = useState([])
+  const [categories, setCategories] = useState(ALL_DEFAULT_CATEGORIES)
   const [selectedCategory, setSelectedCategory] = useState(initialFilters.category || 'All')
   const [selectedCountry, setSelectedCountry] = useState(initialFilters.country || 'All')
   const [selectedExperience, setSelectedExperience] = useState(initialFilters.experience || 'All')
@@ -20,22 +20,10 @@ export const JobSearchBar = ({ initialFilters = {}, onSearch = null }) => {
       if (cats && cats.length > 0) {
         setCategories(cats)
       } else {
-        setCategories([
-          'Facility Management',
-          'Construction & Engineering',
-          'Oil & Gas',
-          'Hospitality & Catering',
-          'Logistics & Transport'
-        ])
+        setCategories(ALL_DEFAULT_CATEGORIES)
       }
     } catch {
-      setCategories([
-        'Facility Management',
-        'Construction & Engineering',
-        'Oil & Gas',
-        'Hospitality & Catering',
-        'Logistics & Transport'
-      ])
+      setCategories(ALL_DEFAULT_CATEGORIES)
     }
   }
 

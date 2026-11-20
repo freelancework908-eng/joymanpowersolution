@@ -44,7 +44,7 @@ export const initialGallery = [
     id: 'gal-04',
     title: 'Certified Heavy Equipment & Rigging Assessment',
     category: 'Trade Testing',
-    image_url: 'https://images.unsplash.com/photo-1541888946425-d0fbb186c5f7?auto=format&fit=crop&w=1000&q=80',
+    image_url: '/gallery/jms-uae-hiring-drivers-welders.jpg',
     caption: 'Crane operator and heavy machinery safety audit conducted by certified GCC technical examiners.',
     created_at: '2026-11-12T14:00:00.000Z'
   }

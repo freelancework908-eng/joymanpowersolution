@@ -111,6 +111,22 @@ export const storageService = {
   },
 
   /**
+   * Upload Job Vacancy Image directly to Backblaze B2
+   */
+  async uploadJobImage(file, onProgress = () => {}) {
+    const validation = this.validateImage(file, MAX_BANNER_SIZE, 'Job Image');
+    if (!validation.valid) {
+      return { url: null, error: new Error(validation.error) };
+    }
+
+    const formData = new FormData();
+    formData.append('file', file);
+    formData.append('folder', 'jobs');
+
+    return await uploadWithProgress('/api/admin/upload', formData, onProgress);
+  },
+
+  /**
    * Upload Homepage Banner Image directly to Backblaze B2
    */
   async uploadBannerImage(file, onProgress = () => {}) {

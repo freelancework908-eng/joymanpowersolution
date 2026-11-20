@@ -12,17 +12,23 @@ import {
 import { jobService } from '../services/jobService'
 import { JobCard } from '../components/common/JobCard'
 import { ApplyModal } from '../components/jobs/ApplyModal'
+import { initialJobs } from '../data/initialJobs'
 
-const CATEGORIES = [
+const DEFAULT_CATEGORIES = [
   'All',
+  'Mason - Block/Plaster',
+  'Tile Mason',
+  'Steel Fixer',
+  'Shuttering Carpenter',
+  'Scaffolder',
+  'Driver',
+  'Engineer',
+  'Pocket Packer',
   'Facility Management',
   'Construction & Engineering',
   'Oil & Gas',
   'Hospitality & Catering',
-  'Logistics & Transport',
-  'Healthcare & Nursing',
-  'Information Technology',
-  'Retail & Sales'
+  'Logistics & Transport'
 ]
 
 const EXPERIENCES = ['All', 'Fresher', '1–2 Years', '3–5 Years', '5+ Years']
@@ -33,13 +39,29 @@ export const Jobs = () => {
   const initialCategory = searchParams.get('category') || 'All'
   const initialExp = searchParams.get('experience') || 'All'
 
-  const [jobs, setJobs] = useState([])
+  const [jobs, setJobs] = useState(initialJobs)
+  const [categories, setCategories] = useState(DEFAULT_CATEGORIES)
   const [loading, setLoading] = useState(true)
   const [countryFilter, setCountryFilter] = useState(initialCountry)
   const [categoryFilter, setCategoryFilter] = useState(initialCategory)
   const [experienceFilter, setExperienceFilter] = useState(initialExp)
   const [searchQuery, setSearchQuery] = useState('')
   const [activeJobForModal, setActiveJobForModal] = useState(null)
+
+  useEffect(() => {
+    loadCategoryList()
+  }, [])
+
+  const loadCategoryList = async () => {
+    try {
+      const cats = await jobService.getCategories()
+      if (cats && cats.length > 0) {
+        setCategories(['All', ...cats.filter((c) => c !== 'All')])
+      }
+    } catch {
+      setCategories(DEFAULT_CATEGORIES)
+    }
+  }
 
   useEffect(() => {
     const cParam = searchParams.get('country')
@@ -62,8 +84,10 @@ export const Jobs = () => {
       experience: experienceFilter,
       search: searchQuery
     })
-    if (data) {
+    if (data && Array.isArray(data)) {
       setJobs(data)
+    } else {
+      setJobs(initialJobs)
     }
     setLoading(false)
   }
@@ -81,8 +105,9 @@ export const Jobs = () => {
     setSearchParams({})
   }
 
-  const uaeCount = jobs.filter((j) => j.country === 'UAE').length
-  const saudiCount = jobs.filter((j) => j.country === 'Saudi Arabia').length
+  const safeJobs = Array.isArray(jobs) && jobs.length > 0 ? jobs : initialJobs
+  const uaeCount = safeJobs.filter((j) => j.country === 'UAE').length
+  const saudiCount = safeJobs.filter((j) => j.country === 'Saudi Arabia').length
 
   return (
     <div className="space-y-8 sm:space-y-12 pb-16 w-full bg-white">
@@ -160,7 +185,7 @@ export const Jobs = () => {
                 onChange={(e) => setCategoryFilter(e.target.value)}
                 className="px-3 py-2 rounded-xl border border-[#DDD0F3] text-xs font-bold text-[#252039] bg-white focus:outline-none focus:border-[#321078]"
               >
-                {CATEGORIES.map((cat) => (
+                {categories.map((cat) => (
                   <option key={cat} value={cat}>
                     {cat === 'All' ? 'All Categories' : cat}
                   </option>
@@ -191,9 +216,9 @@ export const Jobs = () => {
                 </div>
               ))}
             </div>
-          ) : jobs.length > 0 ? (
+          ) : safeJobs.length > 0 ? (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
-              {jobs.map((job) => (
+              {safeJobs.map((job) => (
                 <JobCard
                   key={job.id}
                   job={job}

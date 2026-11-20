@@ -30,6 +30,10 @@ export const CountrySections = ({ uaeCount = 0, saudiCount = 0 }) => {
                   src="https://images.unsplash.com/photo-1586724237569-f3d0c1dee8c6?auto=format&fit=crop&w=800&q=80"
                   alt="Saudi Arabia Overseas Recruitment"
                   className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                  onError={(e) => {
+                    e.currentTarget.onerror = null;
+                    e.currentTarget.src = '/gallery/jms-uae-construction-helpers-200.jpg';
+                  }}
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-[#26075D]/90 via-[#26075D]/40 to-transparent" />
                 <div className="absolute top-4 left-4">
@@ -92,6 +96,10 @@ export const CountrySections = ({ uaeCount = 0, saudiCount = 0 }) => {
                   src="https://images.unsplash.com/photo-1512453979798-5ea266f8880c?auto=format&fit=crop&w=800&q=80"
                   alt="Dubai UAE Overseas Recruitment"
                   className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                  onError={(e) => {
+                    e.currentTarget.onerror = null;
+                    e.currentTarget.src = '/gallery/jms-uae-hiring-drivers-welders.jpg';
+                  }}
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-[#26075D]/90 via-[#26075D]/40 to-transparent" />
                 <div className="absolute top-4 left-4">

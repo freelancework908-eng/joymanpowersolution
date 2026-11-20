@@ -520,6 +520,98 @@ async function runE2EAudit() {
     results.workflow6_settings = Boolean(logoUploadData.key && updateSettingsData.success && isSettingsSynced);
 
     // -------------------------------------------------------------------------
+    // WORKFLOW 7: PART 3 - 5 CONSTRUCTION VACANCIES & 8 JOB CATEGORIES AUDIT
+    // -------------------------------------------------------------------------
+    console.log('\n--- WORKFLOW 7: 5 CONSTRUCTION VACANCIES & 8 CATEGORIES AUDIT ---');
+    results.workflow7_categories_and_jobs = false;
+
+    // 7.1 Verify Categories from API
+    const catRes = await fetch(`${BASE_URL}/api/public/categories`);
+    const catData = await catRes.json();
+    const publicCats = catData.data || [];
+
+    const expectedEight = [
+      'Mason - Block/Plaster',
+      'Tile Mason',
+      'Steel Fixer',
+      'Shuttering Carpenter',
+      'Scaffolder',
+      'Driver',
+      'Engineer',
+      'Pocket Packer'
+    ];
+
+    const hasAllEight = expectedEight.every(c => publicCats.includes(c));
+    logStep('7.1 Verify All 8 Required Categories in System', hasAllEight, `Categories found: ${expectedEight.filter(c => publicCats.includes(c)).join(', ')}`);
+
+    // 7.2 Verify 5 Construction Vacancies Exact Data in Database
+    const pubAllJobsRes = await fetch(`${BASE_URL}/api/public/jobs`);
+    const pubAllJobsData = await pubAllJobsRes.json();
+    const publishedList = pubAllJobsData.data || [];
+
+    const expectedJobs = [
+      { title: 'Mason - Block/Plaster', qty: 150, basic: '1500', ot: '200', total: '1700' },
+      { title: 'Tile Mason', qty: 50, basic: '1600', ot: '200', total: '1800' },
+      { title: 'Steel Fixer', qty: 100, basic: '1400', ot: '200', total: '1600' },
+      { title: 'Shuttering Carpenter', qty: 150, basic: '1400', ot: '200', total: '1600' },
+      { title: 'Scaffolder', qty: 100, basic: '1600', ot: '200', total: '1800' }
+    ];
+
+    let allFiveMatched = true;
+    for (const exp of expectedJobs) {
+      const match = publishedList.find(j => j.title === exp.title);
+      const isMatchOk = Boolean(
+        match &&
+        Number(match.vacancies) === exp.qty &&
+        String(match.salary) === exp.total &&
+        (!match.basic_salary || String(match.basic_salary) === exp.basic) &&
+        (!match.compulsory_ot_salary || String(match.compulsory_ot_salary) === exp.ot)
+      );
+      if (!isMatchOk) allFiveMatched = false;
+      logStep(`7.2 Verify Job "${exp.title}" (Qty: ${exp.qty}, Total: ${exp.total})`, isMatchOk,
+        match ? `Found vacancies: ${match.vacancies}, salary: ${match.salary}` : 'NOT FOUND IN PUBLISHED JOBS');
+    }
+
+    // 7.3 Verify Employment Conditions
+    const sampleConstructionJob = publishedList.find(j => j.title === 'Mason - Block/Plaster');
+    const conditionsOk = Boolean(
+      sampleConstructionJob &&
+      sampleConstructionJob.benefits?.includes('UAE labour laws') &&
+      sampleConstructionJob.benefits?.includes('Joining tickets from India only') &&
+      sampleConstructionJob.benefits?.includes('Visa provided by company') &&
+      sampleConstructionJob.benefits?.includes('Medical insurance provided by company') &&
+      sampleConstructionJob.benefits?.includes('Shared accommodation provided by company') &&
+      sampleConstructionJob.benefits?.includes('Kitchen facility with gas provided by company') &&
+      sampleConstructionJob.benefits?.includes('Transportation provided by company') &&
+      sampleConstructionJob.benefits?.includes('10 hours per day') &&
+      sampleConstructionJob.benefits?.includes('26 days per month') &&
+      sampleConstructionJob.benefits?.includes('4 days per month')
+    );
+    logStep('7.3 Verify Exact Employment Conditions from Image', conditionsOk);
+
+    // 7.4 Test Admin Category Creation & Deletion
+    const testCatName = 'TEST_AUDIT_CATEGORY_' + Date.now();
+    const createCatRes = await fetch(`${BASE_URL}/api/admin/categories`, {
+      method: 'POST',
+      headers: { ...authHeaders, 'Content-Type': 'application/json' },
+      body: JSON.stringify({ name: testCatName })
+    });
+    const createCatData = await createCatRes.json();
+    const testCatId = createCatData.data?.id;
+    logStep('7.4 Admin Create Category in TiDB', createCatData.success && !!testCatId, `Cat ID: ${testCatId}`);
+
+    if (testCatId) {
+      const delCatRes = await fetch(`${BASE_URL}/api/admin/categories/${testCatId}`, {
+        method: 'DELETE',
+        headers: authHeaders
+      });
+      const delCatData = await delCatRes.json();
+      logStep('7.5 Admin Delete Category from TiDB', delCatData.success);
+    }
+
+    results.workflow7_categories_and_jobs = Boolean(hasAllEight && allFiveMatched && conditionsOk);
+
+    // -------------------------------------------------------------------------
     // SUMMARY
     // -------------------------------------------------------------------------
     console.log('\n================================================================');
@@ -530,6 +622,7 @@ async function runE2EAudit() {
     console.log(`WORKFLOW 4 - CANDIDATE APPLICATIONS:     ${results.workflow4_applications ? 'PASS' : 'FAIL'}`);
     console.log(`WORKFLOW 5 - GALLERY MANAGEMENT:          ${results.workflow5_gallery ? 'PASS' : 'FAIL'}`);
     console.log(`WORKFLOW 6 - COMPANY SETTINGS:           ${results.workflow6_settings ? 'PASS' : 'FAIL'}`);
+    console.log(`WORKFLOW 7 - 5 JOBS & 8 CATEGORIES:       ${results.workflow7_categories_and_jobs ? 'PASS' : 'FAIL'}`);
     console.log('================================================================');
 
   } catch (err) {

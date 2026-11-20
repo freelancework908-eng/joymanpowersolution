@@ -52,9 +52,9 @@ router.get('/jobs', async (req, res) => {
     }
 
     if (search && search.trim()) {
-      sql += ' AND (LOWER(title) LIKE ? OR LOWER(description) LIKE ? OR LOWER(location) LIKE ?)';
+      sql += ' AND (LOWER(title) LIKE ? OR LOWER(description) LIKE ? OR LOWER(location) LIKE ? OR LOWER(category) LIKE ?)';
       const term = `%${search.trim().toLowerCase()}%`;
-      params.push(term, term, term);
+      params.push(term, term, term, term);
     }
 
     sql += ' ORDER BY created_at DESC';
@@ -70,12 +70,72 @@ router.get('/jobs', async (req, res) => {
     const normalized = jobs.map((j) => ({
       ...j,
       deadline: j.application_deadline,
+      salary_currency: j.salary_currency || '',
+      working_hours: j.working_hours || null,
+      overtime_details: j.overtime_details || null,
+      accommodation_details: j.accommodation_details || null,
+      transportation_details: j.transportation_details || null,
+      basic_salary: j.basic_salary || null,
+      compulsory_ot_salary: j.compulsory_ot_salary || null,
+      image_url: j.image_url || null,
     }));
 
     return res.json({ success: true, data: normalized });
   } catch (err) {
     console.error('[Public Jobs Error]:', err);
     return res.status(500).json({ success: false, error: 'Failed to retrieve vacancies' });
+  }
+});
+
+/**
+ * 1b. GET /api/public/categories
+ * Distinct active job categories from DB
+ */
+router.get('/categories', async (_req, res) => {
+  try {
+    const rows = await query('SELECT name FROM job_categories ORDER BY id ASC;');
+    if (rows && rows.length > 0) {
+      return res.json({ success: true, data: rows.map(r => r.name) });
+    }
+    // Fallback if table is empty
+    return res.json({
+      success: true,
+      data: [
+        'Mason - Block/Plaster',
+        'Tile Mason',
+        'Steel Fixer',
+        'Shuttering Carpenter',
+        'Scaffolder',
+        'Driver',
+        'Engineer',
+        'Pocket Packer',
+        'Facility Management',
+        'Construction & Engineering',
+        'Oil & Gas',
+        'Hospitality & Catering',
+        'Logistics & Transport'
+      ]
+    });
+  } catch (err) {
+    console.error('[Public Categories Error]:', err);
+    return res.json({
+      success: true,
+      data: [
+        'Mason - Block/Plaster',
+        'Tile Mason',
+        'Steel Fixer',
+        'Shuttering Carpenter',
+        'Scaffolder',
+        'Driver',
+        'Engineer',
+        'Pocket Packer',
+        'Facility Management',
+        'Construction & Engineering',
+        'Oil & Gas',
+        'Hospitality & Catering',
+        'Logistics & Transport'
+      ]
+    });
   }
 });
 
@@ -96,6 +156,14 @@ router.get('/jobs/:id', async (req, res) => {
       data: {
         ...job,
         deadline: job.application_deadline,
+        salary_currency: job.salary_currency || '',
+        working_hours: job.working_hours || null,
+        overtime_details: job.overtime_details || null,
+        accommodation_details: job.accommodation_details || null,
+        transportation_details: job.transportation_details || null,
+        basic_salary: job.basic_salary || null,
+        compulsory_ot_salary: job.compulsory_ot_salary || null,
+        image_url: job.image_url || null,
       }
     });
   } catch (err) {

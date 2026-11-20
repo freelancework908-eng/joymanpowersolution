@@ -49,15 +49,32 @@ export const JobCard = ({ job, onQuickApply }) => {
         </div>
 
         {/* Salary Highlight Pill */}
-        <div className="mt-4 bg-[#F7F4FC] border border-[#DDD0F3] rounded-xl p-2.5 px-3.5 flex items-center justify-between">
-          <span className="text-xs text-[#58617F] font-medium">Offered Salary</span>
-          <span className="text-xs sm:text-sm font-black text-[#321078]">
-            {job.salary}
-          </span>
+        <div className="mt-4 bg-[#F7F4FC] border border-[#DDD0F3] rounded-xl p-2.5 px-3.5 space-y-1">
+          <div className="flex items-center justify-between">
+            <span className="text-xs text-[#58617F] font-medium">Offered Salary</span>
+            <span className="text-xs sm:text-sm font-black text-[#321078]">
+              {job.salary_currency && !String(job.salary).includes(job.salary_currency)
+                ? `${job.salary_currency} ${job.salary}`
+                : job.salary}
+            </span>
+          </div>
+          {job.basic_salary && job.compulsory_ot_salary && (
+            <div className="flex items-center justify-between text-[11px] text-slate-500 pt-0.5 border-t border-[#DDD0F3]/60">
+              <span>8 hrs: <strong className="text-slate-700">{job.basic_salary}</strong></span>
+              <span>2 hrs OT: <strong className="text-slate-700">{job.compulsory_ot_salary}</strong></span>
+              <span className="font-bold text-[#321078]">10 hrs Total</span>
+            </div>
+          )}
         </div>
 
-        {/* Experience & Deadline */}
+        {/* Working Hours & Experience */}
         <div className="mt-3.5 space-y-1.5 text-xs text-[#58617F]">
+          {job.working_hours && (
+            <div className="flex items-center justify-between">
+              <span>Working Hours:</span>
+              <span className="font-bold text-[#252039]">{job.working_hours}</span>
+            </div>
+          )}
           <div className="flex items-center justify-between">
             <span>Experience Required:</span>
             <span className="font-bold text-[#252039]">{job.experience}</span>

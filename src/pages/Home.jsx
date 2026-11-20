@@ -22,9 +22,10 @@ import { CountrySections } from '../components/common/CountrySections'
 import { ProcessSection } from '../components/common/ProcessSection'
 import { ReviewShorts } from '../components/common/ReviewShorts'
 import { useSettings } from '../context/SettingsContext'
+import { initialJobs } from '../data/initialJobs'
 
 export const Home = () => {
-  const [jobs, setJobs] = useState([])
+  const [jobs, setJobs] = useState(initialJobs)
   const [loading, setLoading] = useState(true)
   const [selectedCountry, setSelectedCountry] = useState('All')
   const [activeJobForModal, setActiveJobForModal] = useState(null)
@@ -38,18 +39,24 @@ export const Home = () => {
     try {
       setLoading(true)
       const { data } = await jobService.getPublishedJobs()
-      if (data) setJobs(data)
+      if (data && Array.isArray(data)) {
+        setJobs(data)
+      } else {
+        setJobs(initialJobs)
+      }
     } catch (e) {
-      console.warn('Failed to load published jobs:', e)
+      console.warn('Failed to load published jobs, using fallback:', e)
+      setJobs(initialJobs)
     } finally {
       setLoading(false)
     }
   }
 
-  const uaeCount = jobs.filter((j) => j.country === 'UAE').length
-  const saudiCount = jobs.filter((j) => j.country === 'Saudi Arabia').length
+  const safeJobs = Array.isArray(jobs) && jobs.length > 0 ? jobs : initialJobs
+  const uaeCount = safeJobs.filter((j) => j.country === 'UAE').length
+  const saudiCount = safeJobs.filter((j) => j.country === 'Saudi Arabia').length
 
-  const filteredJobs = jobs.filter((j) => {
+  const filteredJobs = safeJobs.filter((j) => {
     if (selectedCountry === 'All') return true
     return j.country === selectedCountry
   }).slice(0, 6)

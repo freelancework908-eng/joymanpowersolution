@@ -24,6 +24,7 @@ import { AdminReviews } from './pages/admin/AdminReviews'
 import { AdminGallery } from './pages/admin/AdminGallery'
 import { AdminSettings } from './pages/admin/AdminSettings'
 import { ProtectedRoute } from './components/admin/ProtectedRoute'
+import { ErrorBoundary } from './components/common/ErrorBoundary'
 
 const PublicLayout = ({ children }) => (
   <div className="min-h-screen flex flex-col justify-between bg-white text-slate-600 antialiased overflow-x-hidden">
@@ -37,9 +38,10 @@ const PublicLayout = ({ children }) => (
 
 export default function App() {
   return (
-    <AuthProvider>
-      <SettingsProvider>
-        <BrowserRouter>
+    <ErrorBoundary>
+      <AuthProvider>
+        <SettingsProvider>
+          <BrowserRouter>
           <Routes>
             {/* Public Website Routes */}
             <Route
@@ -127,5 +129,6 @@ export default function App() {
         </BrowserRouter>
       </SettingsProvider>
     </AuthProvider>
-  )
+  </ErrorBoundary>
+)
 }
